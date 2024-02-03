@@ -2,6 +2,8 @@ import { Box } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import CardSigin from "../../components/CardSigin";
 
+const company = import.meta.env.VITE_NAME_COMPANY;
+
 const SignIn = () => {
   const urlBackground =
     "url(https://www.infocamaras.com.ar/wp-content/uploads/2022/01/Caracteristicas-del-Software...jpg)";
@@ -31,7 +33,7 @@ const SignIn = () => {
           color="textFielfWhite.main"
           sx={{ m: 2, textAlign: "center" }}
         >
-          My company
+          {company}
         </Typography>
         <CardSigin />
       </Box>
