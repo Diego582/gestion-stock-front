@@ -51,7 +51,7 @@ export default function CardSigin() {
             icon: "success",
             title: "Logged in !",
           });
-          navigate("/admin/admin");
+          navigate("/");
         } else if (res.payload.messages.length > 0) {
           Swal.fire({
             title: "Something went wrong!",
