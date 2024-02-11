@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import CardSigin from "../../components/CardSigin";
+import CardSigin from "../components/CardSigin";
 
 const company = import.meta.env.VITE_NAME_COMPANY;
 
