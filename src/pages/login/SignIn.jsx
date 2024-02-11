@@ -6,7 +6,7 @@ const company = import.meta.env.VITE_NAME_COMPANY;
 
 const SignIn = () => {
   const urlBackground =
-    "url(https://www.infocamaras.com.ar/wp-content/uploads/2022/01/Caracteristicas-del-Software...jpg)";
+    "url(https://www.labrujula24.com/wp-content/uploads/2020/11/super.jpg)";
 
   return (
     <Box
