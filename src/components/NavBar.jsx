@@ -10,6 +10,7 @@ export default function NavBar() {
     dispatch(signout());
     navigate("/");
   };
+  
   return (
     <Box>
       <AppBar
