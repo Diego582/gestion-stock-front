@@ -14,7 +14,7 @@ const theme = createTheme({
       main: "#586155",
     },
     tertiary: {
-      main: "#EBBA07",
+      main: "#96413E",
     },
     fourth: {
       main: "#F8F8F8",
