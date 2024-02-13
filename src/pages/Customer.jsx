@@ -22,8 +22,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import customer_actions from "../store/actions/customers";
-
-const { read_customers } = customer_actions;
+const { read_customers, create_customer, destroy_customer } = customer_actions;
 
 const TextMaskCustom = forwardRef(function TextMaskCustom(props, ref) {
   const { onChange, ...other } = props;
@@ -53,25 +52,24 @@ const Customer = () => {
   const customers = useSelector((store) => store.customers.customers);
   const dispatch = useDispatch();
   console.log(customers, "customers");
-  const [cliente, setCliente] = useState({
-    nombre: "",
-    apellido: "",
-    cuit: "",
-    condicion: "",
-    direccion: "",
-  });
+  const [cliente, setCliente] = useState({});
 
+  console.log(cliente, "cliente");
   const clientes = [
     {
       _id: 1,
-      nombre: "nom",
-      apellido: "ape",
+      name: "nom",
+      lastname: "ape",
       cuit: "12345678911",
-      condicion: "A",
-      direccion: "14 de octubre",
+      condition: "A",
+      address: "14 de octubre",
     },
   ];
-  const condiciones = ["A", "B", "C"];
+  const conditions = [
+    "Responsable Inscripto",
+    "Monotributista",
+    "Consumidor Final",
+  ];
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCliente((prevState) => ({
@@ -81,19 +79,21 @@ const Customer = () => {
   };
 
   const handlePost = (cliente) => {
+    console.log(cliente, "cliente en handle post");
+    dispatch(create_customer(cliente));
     handleOpenCloseCreate();
   };
 
   const handleSelected = (cliente, option) => {
     setCliente(cliente);
     option === "Edit" ? handleOpenCloseEdit() : handleOpenCloseDelete();
-    console.log("esto es destreza seleccionar consola", cliente, option);
   };
 
   const handleOpenCloseDelete = () => {
     setOpenDelete(!openDelete);
   };
   const handleDelete = (cliente) => {
+    dispatch(destroy_customer(cliente));
     handleOpenCloseDelete();
   };
 
@@ -150,8 +150,8 @@ const Customer = () => {
           flexWrap: "wrap",
         }}
       >
-        {clientes &&
-          clientes.map((item, index) => {
+        {customers &&
+          customers.map((item, index) => {
             return (
               <Paper
                 sx={{
@@ -165,14 +165,14 @@ const Customer = () => {
                 <Card>
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                      {item.apellido} , {item.nombre}
+                      {item.lastname} , {item.name}
                     </Typography>
 
                     <Typography gutterBottom variant="body2" component="div">
                       {item.cuit}
                     </Typography>
                     <Typography gutterBottom variant="body2" component="div">
-                      {item.direccion}
+                      {item.address}
                     </Typography>
                   </CardContent>
                   <CardActions
@@ -184,11 +184,6 @@ const Customer = () => {
                         onClick={() => handleSelected(item, "Delete")}
                       >
                         <DeleteForeverIcon color="error" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Agrega a Favoritos">
-                      <IconButton aria-label="add to favorites">
-                        <FavoriteIcon />
                       </IconButton>
                     </Tooltip>
 
@@ -235,14 +230,14 @@ const Customer = () => {
             <TextField
               autoFocus
               fullWidth
-              name="nombre"
+              name="name"
               label="Nombres"
               variant="filled"
               onChange={handleChange}
               sx={{ m: 0.5, p: 0.5 }}
             />
             <TextField
-              name="apellido"
+              name="lastname"
               fullWidth
               label="Apellidos"
               variant="filled"
@@ -262,10 +257,18 @@ const Customer = () => {
               }}
               sx={{ m: 0.5, p: 0.5 }}
             />
+            <TextField
+              name="address"
+              fullWidth
+              label="Direccion"
+              variant="filled"
+              onChange={handleChange}
+              sx={{ m: 0.5, p: 0.5 }}
+            />
 
             <TextField
               select
-              name="condicion"
+              name="condition"
               fullWidth
               label="Condicion"
               variant="filled"
@@ -274,9 +277,9 @@ const Customer = () => {
               defaultValue=""
               helperText="Por favor seleccione una Opcion"
             >
-              {condiciones.map((option) => (
-                <MenuItem key={option.value} value={option._id}>
-                  {option.nombre}
+              {conditions.map((option, index) => (
+                <MenuItem key={index} value={option}>
+                  {option}
                 </MenuItem>
               ))}
             </TextField>
@@ -320,8 +323,8 @@ const Customer = () => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "50%",
-            height: "50%",
+            width: "75%",
+            height: "75%",
             bgcolor: "background.paper",
             border: "2px solid #000",
             boxShadow: 24,
@@ -341,7 +344,7 @@ const Customer = () => {
               name="nombre"
               label="Nombres"
               variant="filled"
-              value={cliente && cliente.nombre}
+              value={cliente && cliente.name}
               onChange={handleChange}
               sx={{ m: 0.5, p: 0.5 }}
             />
@@ -351,7 +354,7 @@ const Customer = () => {
               fullWidth
               label="Apellidos"
               variant="filled"
-              value={cliente && cliente.apellido}
+              value={cliente && cliente.lastname}
               onChange={handleChange}
               sx={{ m: 0.5, p: 0.5 }}
             />
