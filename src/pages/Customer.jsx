@@ -22,6 +22,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import customer_actions from "../store/actions/customers";
+import Swal from "sweetalert2";
 const { read_customers, create_customer, destroy_customer } = customer_actions;
 
 const TextMaskCustom = forwardRef(function TextMaskCustom(props, ref) {
@@ -51,20 +52,8 @@ const Customer = () => {
 
   const customers = useSelector((store) => store.customers.customers);
   const dispatch = useDispatch();
-  console.log(customers, "customers");
   const [cliente, setCliente] = useState({});
 
-  console.log(cliente, "cliente");
-  const clientes = [
-    {
-      _id: 1,
-      name: "nom",
-      lastname: "ape",
-      cuit: "12345678911",
-      condition: "A",
-      address: "14 de octubre",
-    },
-  ];
   const conditions = [
     "Responsable Inscripto",
     "Monotributista",
@@ -80,7 +69,23 @@ const Customer = () => {
 
   const handlePost = (cliente) => {
     console.log(cliente, "cliente en handle post");
-    dispatch(create_customer(cliente));
+    dispatch(create_customer(cliente))
+      .then((res) => {
+        if (res.payload.customer.length > 0) {
+          Swal.fire({
+            icon: "success",
+            title: "Carga Exitosa!",
+          });
+        } else if (res.payload.messages.length > 0) {
+          Swal.fire({
+            title: "Something went wrong!",
+            icon: "error",
+            html: res.payload.messages.map((each) => `<p>${each}<p>`),
+          });
+        }
+      })
+      .catch((err) => {});
+
     handleOpenCloseCreate();
   };
 
@@ -165,7 +170,7 @@ const Customer = () => {
                 <Card>
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                      {item.lastname} , {item.name}
+                      {item.lastName} , {item.name}
                     </Typography>
 
                     <Typography gutterBottom variant="body2" component="div">
@@ -227,36 +232,66 @@ const Customer = () => {
             Crear nuevo Cliente
           </Typography>
           <Box sx={{ width: "100%", mt: 1, pt: 1 }}>
-            <TextField
-              autoFocus
-              fullWidth
-              name="name"
-              label="Nombres"
-              variant="filled"
-              onChange={handleChange}
-              sx={{ m: 0.5, p: 0.5 }}
-            />
-            <TextField
-              name="lastname"
-              fullWidth
-              label="Apellidos"
-              variant="filled"
-              onChange={handleChange}
-              sx={{ m: 0.5, p: 0.5 }}
-            />
-            <TextField
-              name="cuit"
-              required
-              fullWidth
-              label="C.U.I.T"
-              value={cliente.cuit}
-              variant="filled"
-              onChange={handleChange}
-              InputProps={{
-                inputComponent: TextMaskCustom,
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                m: 0.5,
+                p: 0.5,
               }}
-              sx={{ m: 0.5, p: 0.5 }}
-            />
+            >
+              <TextField
+                autoFocus
+                fullWidth
+                name="name"
+                label="Nombres"
+                variant="filled"
+                onChange={handleChange}
+                sx={{ mr: 0.5 }}
+              />
+              <TextField
+                name="lastName"
+                fullWidth
+                label="Apellidos"
+                variant="filled"
+                onChange={handleChange}
+                sx={{ ml: 0.5 }}
+              />
+            </Box>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                m: 0.5,
+                p: 0.5,
+              }}
+            >
+              <TextField
+                name="dni"
+                required
+                fullWidth
+                label="D.N.I."
+                variant="filled"
+                onChange={handleChange}
+                inputProps={{ maxLength: 8 }}
+                sx={{ mr: 0.5 }}
+              />
+              <TextField
+                name="cuit"
+                required
+                fullWidth
+                label="C.U.I.T"
+                value={cliente.cuit}
+                variant="filled"
+                onChange={handleChange}
+                InputProps={{
+                  inputComponent: TextMaskCustom,
+                }}
+                sx={{ ml: 0.5 }}
+              />
+            </Box>
             <TextField
               name="address"
               fullWidth
@@ -354,7 +389,7 @@ const Customer = () => {
               fullWidth
               label="Apellidos"
               variant="filled"
-              value={cliente && cliente.lastname}
+              value={cliente && cliente.lastName}
               onChange={handleChange}
               sx={{ m: 0.5, p: 0.5 }}
             />
