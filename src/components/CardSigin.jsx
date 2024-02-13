@@ -42,8 +42,6 @@ export default function CardSigin() {
     }));
   };
   const handleSignin = () => {
-    console.log("ingreso a handleSignin");
-    console.log(data,'esto es data')
     dispatch(signin({ data }))
       .then((res) => {
         if (res.payload.token) {

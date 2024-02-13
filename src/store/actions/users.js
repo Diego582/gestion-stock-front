@@ -4,10 +4,7 @@ import apiUrl from "../../apiUrl";
 
 const signin = createAsyncThunk("signin", async (obj) => {
   try {
-    console.log(obj.data, "obj en actions");
-    console.log(apiUrl, "esto es api Url");
     let data = await axios.post(apiUrl + "auth/signin", obj.data);
-    console.log(data, "data en actions");
     localStorage.setItem("token", data.data.response.token);
     return {
       user: data.data.response.user,
@@ -15,7 +12,6 @@ const signin = createAsyncThunk("signin", async (obj) => {
       messages: [],
     };
   } catch (error) {
-    console.log(error, "error en signin");
     return {
       user: {},
       token: "",

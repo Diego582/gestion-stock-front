@@ -30,7 +30,6 @@ const create_customer = createAsyncThunk(
         messages: [],
       };
     } catch (error) {
-      console.log(error, "error el createCustomer");
       return {
         customer: {},
         messages: error.response.data.messages || [error.response.data.message],
