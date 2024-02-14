@@ -4,6 +4,7 @@ import {
   ListItem,
   ListItemButton,
   ListItemIcon,
+  Tooltip,
 } from "@mui/material";
 import React from "react";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
@@ -33,17 +34,19 @@ export default function MenuBar() {
           <ListItem key={index} disablePadding>
             <Link to={text.toLowerCase()} style={{ textDecoration: "none" }}>
               <ListItemButton>
-                <ListItemIcon>
-                  {text === "Ventas" ? (
-                    <ShoppingCartCheckoutIcon sx={{ color: "white" }} />
-                  ) : text === "Compras" ? (
-                    <StoreIcon sx={{ color: "white" }} />
-                  ) : text === "Clientes" ? (
-                    <GroupIcon sx={{ color: "white" }} />
-                  ) : (
-                    <FeedIcon sx={{ color: "white" }} />
-                  )}
-                </ListItemIcon>
+                <Tooltip title={text}>
+                  <ListItemIcon sx={{ pt: 2, pb: 2 }}>
+                    {text === "Ventas" ? (
+                      <ShoppingCartCheckoutIcon sx={{ color: "white" }} />
+                    ) : text === "Compras" ? (
+                      <StoreIcon sx={{ color: "white" }} />
+                    ) : text === "Clientes" ? (
+                      <GroupIcon sx={{ color: "white" }} />
+                    ) : (
+                      <FeedIcon sx={{ color: "white" }} />
+                    )}
+                  </ListItemIcon>
+                </Tooltip>
               </ListItemButton>
             </Link>
           </ListItem>
@@ -51,8 +54,10 @@ export default function MenuBar() {
       </List>
       <List>
         <ListItem>
-          <ListItemIcon>
-            <ExitToAppIcon sx={{ color: "white" }} />
+          <ListItemIcon sx={{ pt: 2, pb: 2 }}>
+            <Tooltip title="Salir">
+              <ExitToAppIcon sx={{ color: "white" }} />
+            </Tooltip>
           </ListItemIcon>
         </ListItem>
       </List>

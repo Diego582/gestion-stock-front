@@ -23,6 +23,9 @@ const customer_reducer = createReducer(initial_state, (build) =>
       let new_state = {
         ...state,
         customer: action.payload.customer,
+        customers: action.payload.customer
+          ? [...state.customers, action.payload.customer]
+          : [...state.customers],
         messages: action.payload.messages,
       };
       return new_state;
@@ -31,6 +34,11 @@ const customer_reducer = createReducer(initial_state, (build) =>
       let new_state = {
         ...state,
         customer: action.payload.customer,
+        customers: [
+          ...state.customers.filter(
+            (item) => item._id !== action.payload.customer
+          ),
+        ],
         messages: action.payload.messages,
       };
       return new_state;
