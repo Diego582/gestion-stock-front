@@ -23,6 +23,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import customer_actions from "../store/actions/customers";
 import Swal from "sweetalert2";
+import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 const { read_customers, create_customer, destroy_customer } = customer_actions;
 
 const TextMaskCustom = forwardRef(function TextMaskCustom(props, ref) {
@@ -51,13 +52,16 @@ const Customer = () => {
   const [openCreate, setOpenCreate] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [search, setSearch] = useState({ lastName: "" });
-  const [cliente, setCliente] = useState({});
+  const [cliente, setCliente] = useState({
+    cuit: "",
+  });
   const customers = useSelector((store) => store.customers.customers);
   const stores = useSelector((store) => store);
   const conditions = [
     "Responsable Inscripto",
     "Monotributista",
     "Consumidor Final",
+    "Exento",
   ];
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,7 +72,6 @@ const Customer = () => {
   };
 
   const handlePost = (cliente) => {
-    console.log(cliente, "cliente en handle post");
     dispatch(create_customer(cliente))
       .then((res) => {
         if (res.payload.customer.length > 0) {
@@ -117,13 +120,11 @@ const Customer = () => {
   const handleOpenCloseCreate = () => {
     setOpenCreate(!openCreate);
   };
-  console.log(search, "search en customer");
+  const handelSubmit = () => {};
+
   useEffect(() => {
     dispatch(read_customers(search));
   }, [search]);
-
-  console.log(stores, "stores");
-  console.log(cliente, "cliente");
 
   return (
     <Box
@@ -224,9 +225,6 @@ const Customer = () => {
       {/* ESTE ES EL MODAL DE CREATE */}
       <Modal open={openCreate} onClose={handleOpenCloseCreate}>
         <Box
-          component="form"
-          encType="multipart/form-data"
-          method="post"
           sx={{
             position: "absolute",
             top: "50%",
@@ -243,122 +241,124 @@ const Customer = () => {
             justifyItems: "center",
           }}
         >
-          <Typography variant="h4" color="secondary">
-            Crear nuevo Cliente
-          </Typography>
-          <Box sx={{ width: "100%", mt: 1, pt: 1 }}>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-                m: 0.5,
-                p: 0.5,
-              }}
-            >
-              <TextField
-                autoFocus
-                fullWidth
-                name="name"
-                label="Nombres"
-                variant="filled"
-                onChange={handleChange}
-                sx={{ mr: 0.5 }}
-              />
-              <TextField
-                name="lastName"
-                fullWidth
-                label="Apellidos"
-                variant="filled"
-                onChange={handleChange}
-                sx={{ ml: 0.5 }}
-              />
-            </Box>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-                m: 0.5,
-                p: 0.5,
-              }}
-            >
-              <TextField
-                name="dni"
-                required
-                fullWidth
-                label="D.N.I."
-                variant="filled"
-                onChange={handleChange}
-                inputProps={{ maxLength: 8 }}
-                sx={{ mr: 0.5 }}
-              />
-              <TextField
-                name="cuit"
-                required
-                fullWidth
-                label="C.U.I.T"
-                value={cliente.cuit}
-                variant="filled"
-                onChange={handleChange}
-                InputProps={{
-                  inputComponent: TextMaskCustom,
+          <ValidatorForm onSubmit={handelSubmit}>
+            <Typography variant="h4" color="secondary">
+              Crear nuevo Cliente
+            </Typography>
+            <Box sx={{ width: "100%", mt: 1, pt: 1 }}>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  m: 0.5,
+                  p: 0.5,
                 }}
-                sx={{ ml: 0.5 }}
+              >
+                <TextField
+                  autoFocus
+                  fullWidth
+                  name="name"
+                  label="Nombres"
+                  variant="filled"
+                  onChange={handleChange}
+                  sx={{ mr: 0.5 }}
+                />
+                <TextField
+                  name="lastName"
+                  fullWidth
+                  label="Apellidos"
+                  variant="filled"
+                  onChange={handleChange}
+                  sx={{ ml: 0.5 }}
+                />
+              </Box>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  m: 0.5,
+                  p: 0.5,
+                }}
+              >
+                <TextField
+                  name="dni"
+                  fullWidth
+                  required
+                  label="D.N.I."
+                  variant="filled"
+                  onChange={handleChange}
+                  inputProps={{ maxLength: 8 }}
+                  sx={{ mr: 0.5 }}
+                />
+                <Box sx={{ width: "100%", ml: 0.5 }}>
+                  <TextValidator
+                    name="cuit"
+                    fullWidth
+                    label="C.U.I.T"
+                    variant="filled"
+                    value={cliente.cuit}
+                    validators={["required"]}
+                    errorMessages={["Este campo es requerido"]}
+                    onChange={handleChange}
+                  />
+                </Box>
+              </Box>
+              <TextField
+                name="address"
+                fullWidth
+                label="Direccion"
+                variant="filled"
+                onChange={handleChange}
+                sx={{ m: 0.5, p: 0.5 }}
               />
+
+              <TextField
+                select
+                name="condition"
+                fullWidth
+                label="Condicion"
+                variant="filled"
+                onChange={handleChange}
+                sx={{ m: 0.5, p: 0.5 }}
+                defaultValue=""
+                helperText="Por favor seleccione una Opcion"
+              >
+                {conditions.map((option, index) => (
+                  <MenuItem key={index} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Box>
-            <TextField
-              name="address"
-              fullWidth
-              label="Direccion"
-              variant="filled"
-              onChange={handleChange}
-              sx={{ m: 0.5, p: 0.5 }}
-            />
 
-            <TextField
-              select
-              name="condition"
-              fullWidth
-              label="Condicion"
-              variant="filled"
-              onChange={handleChange}
-              sx={{ m: 0.5, p: 0.5 }}
-              defaultValue=""
-              helperText="Por favor seleccione una Opcion"
+            <Divider />
+            <Box
+              sx={{
+                width: "75%",
+                display: "flex",
+                justifyContent: "space-around",
+              }}
             >
-              {conditions.map((option, index) => (
-                <MenuItem key={index} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Box>
-
-          <Divider />
-          <Box
-            sx={{
-              width: "75%",
-              display: "flex",
-              justifyContent: "space-around",
-            }}
-          >
-            <Button
-              onClick={handleOpenCloseCreate}
-              variant="contained"
-              color="error"
-              sx={{ mr: 0.5, ml: 0.5 }}
-            >
-              Cancelar
-            </Button>
-            <Button
-              variant="contained"
-              color="success"
-              onClick={() => handlePost(cliente)}
-            >
-              Guardar
-            </Button>
-          </Box>
+              <Button
+                onClick={handleOpenCloseCreate}
+                variant="contained"
+                color="error"
+                sx={{ mr: 0.5, ml: 0.5 }}
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                color="success"
+                onClick={() => handlePost(cliente)}
+              >
+                Guardar
+              </Button>
+            </Box>
+          </ValidatorForm>
         </Box>
       </Modal>
 
