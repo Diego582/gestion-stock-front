@@ -47,13 +47,13 @@ TextMaskCustom.propTypes = {
 };
 
 const Customer = () => {
+  const dispatch = useDispatch();
   const [openCreate, setOpenCreate] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-
-  const customers = useSelector((store) => store.customers.customers);
-  const dispatch = useDispatch();
+  const [search, setSearch] = useState({ lastName: "" });
   const [cliente, setCliente] = useState({});
-
+  const customers = useSelector((store) => store.customers.customers);
+  const stores = useSelector((store) => store);
   const conditions = [
     "Responsable Inscripto",
     "Monotributista",
@@ -76,6 +76,7 @@ const Customer = () => {
             icon: "success",
             title: "Carga Exitosa!",
           });
+          setCliente({});
         } else if (res.payload.messages.length > 0) {
           Swal.fire({
             title: "Something went wrong!",
@@ -89,6 +90,14 @@ const Customer = () => {
     handleOpenCloseCreate();
   };
 
+  const handleFilter = (e) => {
+    const { name, value } = e.target;
+    setSearch((prevState) => ({
+      ...prevState,
+      [name]: value.trim(),
+    }));
+  };
+
   const handleSelected = (cliente, option) => {
     setCliente(cliente);
     option === "Edit" ? handleOpenCloseEdit() : handleOpenCloseDelete();
@@ -99,6 +108,7 @@ const Customer = () => {
   };
   const handleDelete = (cliente) => {
     dispatch(destroy_customer(cliente));
+    setCliente({});
     handleOpenCloseDelete();
   };
 
@@ -107,10 +117,13 @@ const Customer = () => {
   const handleOpenCloseCreate = () => {
     setOpenCreate(!openCreate);
   };
-
+  console.log(search, "search en customer");
   useEffect(() => {
-    dispatch(read_customers());
-  }, []);
+    dispatch(read_customers(search));
+  }, [search]);
+
+  console.log(stores, "stores");
+  console.log(cliente, "cliente");
 
   return (
     <Box
@@ -125,8 +138,8 @@ const Customer = () => {
           display: "flex",
           justifyContent: "space-between",
           flexWrap: "wrap",
-          m: 2,
-          p: 2,
+          m: 1,
+          p: 1,
         }}
       >
         <Typography variant="h4">Clientes</Typography>
@@ -140,9 +153,11 @@ const Customer = () => {
       </Box>
       <TextField
         id="filled-search"
-        label="Buscar Cliente"
+        label="Buscar Cliente por Apellido"
         type="search"
         variant="filled"
+        name="lastName"
+        onKeyUp={handleFilter}
         fullWidth
         sx={{ mb: 2 }}
       />

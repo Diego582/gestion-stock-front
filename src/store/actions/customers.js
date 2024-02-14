@@ -5,7 +5,7 @@ import apiUrl from "../../apiUrl";
 const read_customers = createAsyncThunk("read_customers", async (obj) => {
   //callback que realiza la petición
   try {
-    let data = await axios(apiUrl + "customers");
+    let data = await axios(apiUrl + "customers?lastName=" + obj.lastName);
 
     return {
       customers: data.data.response,
@@ -22,16 +22,14 @@ const create_customer = createAsyncThunk(
   async (obj) => {
     //callback que realiza la petición
     try {
-      console.log(obj, "llego a create_customer");
       let data = await axios.post(apiUrl + "customers", obj);
-      console.log(data, "data en create_customer");
       return {
         customer: data.data.response,
         messages: [],
       };
     } catch (error) {
       return {
-        customer: {},
+        customer: false,
         messages: error.response.data.messages || [error.response.data.message],
       };
     }
@@ -43,15 +41,13 @@ const destroy_customer = createAsyncThunk(
   async (obj) => {
     //callback que realiza la petición
     try {
-      console.log(obj, "destroy_customer");
-      await axios.delete(apiUrl + "customers/" + obj._id);
+      let data = await axios.delete(apiUrl + "customers/" + obj._id);
 
       return {
-        customer: {},
+        customer: data.data.response,
         messages: [],
       };
     } catch (error) {
-      console.log(error, "error al borrar");
       return {
         customer: {},
         messages: error.response.data.messages || [error.response.data.message],
