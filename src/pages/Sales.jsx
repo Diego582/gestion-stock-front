@@ -6,9 +6,11 @@ const Sales = () => {
   return (
     <Box sx={{ display: "flex", flexWrap: "wrap" }}>
       <NavSales />
-      <Typography variant="h1" color="initial">
-        ESTO ES Ventas
-      </Typography>
+      <Box sx={{ height: "82vh" }}>
+        <Typography variant="h1" color="initial">
+          ESTO ES Ventas
+        </Typography>
+      </Box>
     </Box>
   );
 };
