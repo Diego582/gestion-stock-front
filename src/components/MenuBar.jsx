@@ -12,10 +12,11 @@ import StoreIcon from "@mui/icons-material/Store";
 import GroupIcon from "@mui/icons-material/Group";
 import FeedIcon from "@mui/icons-material/Feed";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import WidgetsIcon from "@mui/icons-material/Widgets";
 import { Link } from "react-router-dom";
 
 export default function MenuBar() {
-  const categories = ["Ventas", "Compras", "Clientes", "Reportes"];
+  const categories = ["Ventas", "Compras", "Clientes", "Productos", "Reportes"];
 
   return (
     <Box
@@ -40,6 +41,8 @@ export default function MenuBar() {
                       <ShoppingCartCheckoutIcon sx={{ color: "white" }} />
                     ) : text === "Compras" ? (
                       <StoreIcon sx={{ color: "white" }} />
+                    ) : text === "Productos" ? (
+                      <WidgetsIcon sx={{ color: "white" }} />
                     ) : text === "Clientes" ? (
                       <GroupIcon sx={{ color: "white" }} />
                     ) : (
