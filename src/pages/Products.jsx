@@ -10,8 +10,8 @@ const Products = () => {
     <Box
       sx={{
         justifyContent: "space-between",
-        m: 2,
         width: "100%",
+        height: "90vh",
       }}
     >
       <Box
@@ -19,8 +19,7 @@ const Products = () => {
           display: "flex",
           justifyContent: "space-between",
           flexWrap: "wrap",
-          m: 1,
-          p: 1,
+         
         }}
       >
         <Typography variant="h4">Productos</Typography>

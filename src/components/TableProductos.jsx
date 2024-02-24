@@ -128,8 +128,8 @@ export default function TableProductos() {
   return (
     <>
       {data && data.length > 0 ? (
-        <TableContainer sx={{ height: "100%" }}>
-          <Table>
+        <TableContainer sx={{ height: "70vh" }}>
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
                 {columns.map((column, index) => {
@@ -142,6 +142,7 @@ export default function TableProductos() {
                 <TableRow
                   sx={{
                     borderRadius: "10px",
+                    backgroundColor: index % 2 === 0 ? "rgba(157, 85, 82, 0.3)" : "white",
                   }}
                   key={index}
                 >
