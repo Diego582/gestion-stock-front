@@ -20,6 +20,7 @@ const read_products = createAsyncThunk("read_products", async (obj) => {
 const read_product = createAsyncThunk("read_product", async (obj) => {
   //callback que realiza la petición
   try {
+    console.log(obj.codigoBarras, "obj.codigoBarras");
     let data = await axios(
       apiUrl + "products?codigoBarras=" + obj.codigoBarras
     );
