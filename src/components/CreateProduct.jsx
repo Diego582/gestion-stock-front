@@ -7,17 +7,18 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import product_actions from "../store/actions/products";
 const { read_product, read_products } = product_actions;
 
 export default function CreateProduct({ openCreate, setOpenCreate }) {
   const dispatch = useDispatch();
+  const productSearch = useSelector((store) => store.products.product);
   const handleOpenCloseCreate = () => {
     setOpenCreate(!openCreate);
   };
 
-  const [codigoBarras, setCodigoBarras] = useState();
+  const [codigoBarras, setCodigoBarras] = useState('');
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProducto((prevState) => ({
@@ -26,10 +27,24 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
     }));
   };
 
+  const handleChangeSearch = (e) => {
+    const { name, value } = e.target;
+    setCodigoBarras((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handlePost = (codigo) => {
+    dispatch(read_product(codigo));
+  };
+
   useEffect(() => {
     dispatch(read_product(codigoBarras));
-  }, [codigoBarras]);
+  }, []);
 
+  console.log(codigoBarras, "codigo de barras");
+  console.log(productSearch, "productSearch");
   return (
     <>
       <Modal open={openCreate} onClose={handleOpenCloseCreate}>
@@ -54,6 +69,16 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
             Crear nuevo Producto
           </Typography>
           <Box sx={{ width: "100%", mt: 1, pt: 1 }}>
+            <TextField
+              name="agrupamiento"
+              fullWidth
+              required
+              label="Agrupamiento"
+              variant="filled"
+              onChange={handleChange}
+              sx={{ m: 0.5, p: 0.5 }}
+            />
+
             <Box
               sx={{
                 width: "100%",
@@ -66,15 +91,17 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
               <TextField
                 autoFocus
                 fullWidth
+                required
                 name="codigoBarras"
                 label="Codigo de Barras"
                 variant="filled"
-                onChange={handleChange}
+                onChange={handleChangeSearch}
                 sx={{ mr: 0.5 }}
               />
               <TextField
                 name="descripcion"
                 fullWidth
+                required
                 label="Descripcion"
                 variant="filled"
                 onChange={handleChange}
@@ -101,14 +128,6 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
                 sx={{ mr: 0.5 }}
               />
             </Box>
-            <TextField
-              name="agrupamiento"
-              fullWidth
-              label="Agrupamiento"
-              variant="filled"
-              onChange={handleChange}
-              sx={{ m: 0.5, p: 0.5 }}
-            />
           </Box>
 
           <Divider />
@@ -131,9 +150,9 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
               type="submit"
               variant="contained"
               color="success"
-              onClick={() => handlePost(cliente)}
+              onClick={() => handlePost(codigoBarras)}
             >
-              Guardar
+              Verificar
             </Button>
           </Box>
         </Box>
