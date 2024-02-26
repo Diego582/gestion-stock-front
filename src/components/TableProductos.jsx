@@ -18,10 +18,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useSelector } from "react-redux";
 import { useState } from "react";
+import CreateProduct from "./CreateProduct";
 
 export default function TableProductos({ openCreate, setOpenCreate }) {
   /*   const data = useSelector((store) => store[dataStore][dataStore]); */
 
+  const [codigoBarras, setCodigoBarras] = useState({});
   const data = [
     {
       _id: "1",
@@ -131,18 +133,6 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
 
   const [producto, setProducto] = useState({});
 
-  const handleOpenCloseCreate = () => {
-    setOpenCreate(!openCreate);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProducto((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
   console.log(producto, "producto");
   return (
     <>
@@ -200,113 +190,7 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
         <Typography>No hay datos que mostrar</Typography>
       )}
 
-      {/* ESTE ES EL MODAL DE CREATE */}
-      <Modal open={openCreate} onClose={handleOpenCloseCreate}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "75%",
-            height: "75%",
-            bgcolor: "background.paper",
-            border: "2px solid #000",
-            boxShadow: 24,
-            p: 4,
-            display: "grid",
-            alignContent: "space-around",
-            justifyItems: "center",
-          }}
-        >
-          <Typography variant="h4" color="secondary">
-            Crear nuevo Producto
-          </Typography>
-          <Box sx={{ width: "100%", mt: 1, pt: 1 }}>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-                m: 0.5,
-                p: 0.5,
-              }}
-            >
-              <TextField
-                autoFocus
-                fullWidth
-                name="codigoBarras"
-                label="Codigo de Barras"
-                variant="filled"
-                onChange={handleChange}
-                sx={{ mr: 0.5 }}
-              />
-              <TextField
-                name="descripcion"
-                fullWidth
-                label="Descripcion"
-                variant="filled"
-                onChange={handleChange}
-                sx={{ ml: 0.5 }}
-              />
-            </Box>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-                m: 0.5,
-                p: 0.5,
-              }}
-            >
-              <TextField
-                name="categoria"
-                fullWidth
-                required
-                label="Categoria"
-                variant="filled"
-                onChange={handleChange}
-                inputProps={{ maxLength: 8 }}
-                sx={{ mr: 0.5 }}
-              />
-            </Box>
-            <TextField
-              name="agrupamiento"
-              fullWidth
-              label="Agrupamiento"
-              variant="filled"
-              onChange={handleChange}
-              sx={{ m: 0.5, p: 0.5 }}
-            />
-          </Box>
-
-          <Divider />
-          <Box
-            sx={{
-              width: "75%",
-              display: "flex",
-              justifyContent: "space-around",
-            }}
-          >
-            <Button
-              onClick={handleOpenCloseCreate}
-              variant="contained"
-              color="error"
-              sx={{ mr: 0.5, ml: 0.5 }}
-            >
-              Cancelar
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              color="success"
-              onClick={() => handlePost(cliente)}
-            >
-              Guardar
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+      <CreateProduct openCreate={openCreate} setOpenCreate={setOpenCreate} />
     </>
   );
 }
