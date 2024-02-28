@@ -14,11 +14,27 @@ const { read_product, read_products } = product_actions;
 export default function CreateProduct({ openCreate, setOpenCreate }) {
   const dispatch = useDispatch();
   const productSearch = useSelector((store) => store.products.product);
-  const handleOpenCloseCreate = () => {
-    setOpenCreate(!openCreate);
-  };
 
-  const [codigoBarras, setCodigoBarras] = useState('');
+  const currencies = [
+    {
+      value: "USD",
+      label: "$",
+    },
+    {
+      value: "EUR",
+      label: "€",
+    },
+    {
+      value: "BTC",
+      label: "฿",
+    },
+    {
+      value: "JPY",
+      label: "¥",
+    },
+  ];
+
+  const [codigoBarras, setCodigoBarras] = useState("");
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProducto((prevState) => ({
@@ -34,6 +50,9 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
       [name]: value,
     }));
   };
+  const handleOpenCloseCreate = () => {
+    setOpenCreate(!openCreate);
+  };
 
   const handlePost = (codigo) => {
     dispatch(read_product(codigo));
@@ -41,7 +60,7 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
 
   useEffect(() => {
     dispatch(read_product(codigoBarras));
-  }, []);
+  }, [codigoBarras]);
 
   console.log(codigoBarras, "codigo de barras");
   console.log(productSearch, "productSearch");
@@ -70,7 +89,6 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
           </Typography>
           <Box sx={{ width: "100%", mt: 1, pt: 1 }}>
             <TextField
-              name="agrupamiento"
               fullWidth
               required
               label="Agrupamiento"
@@ -78,6 +96,21 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
               onChange={handleChange}
               sx={{ m: 0.5, p: 0.5 }}
             />
+
+            <TextField
+              id="outlined-select-currency"
+              name="agrupamiento"
+              select
+              label="Agrupamiento"
+              defaultValue=""
+              helperText="Selecciona un Agrupamiento"
+            >
+              {currencies.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
 
             <Box
               sx={{
