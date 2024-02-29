@@ -10,7 +10,10 @@ import {
 import React from "react";
 import { useDispatch } from "react-redux";
 
-export default function CreateAgrupamiento({ openCreate, setOpenCreate }) {
+export default function CreateAgrupamiento({
+  openCreateAgru,
+  setOpenCreateAgru,
+}) {
   const dispatch = useDispatch();
   const productSearch = useSelector((store) => store.products.product);
   const [codigoBarras, setCodigoBarras] = useState("");
@@ -18,18 +21,12 @@ export default function CreateAgrupamiento({ openCreate, setOpenCreate }) {
     const { name, value } = e.target;
     setProducto((prevState) => ({
       ...prevState,
-      [name]: value, 
-    }));
-  };
-  const handleChangeSearch = (e) => {
-    const { name, value } = e.target;
-    setCodigoBarras((prevState) => ({
-      ...prevState,
       [name]: value,
     }));
   };
-  const handleOpenCloseCreate = () => {
-    setOpenCreate(!openCreate);
+
+  const handleOpenCloseCreateAgru = () => {
+    setOpenCreateAgru(!openCreateAgru);
   };
 
   const handlePost = (codigo) => {
@@ -40,12 +37,9 @@ export default function CreateAgrupamiento({ openCreate, setOpenCreate }) {
     dispatch(read_product(codigoBarras));
   }, [codigoBarras]);
 
-  console.log(codigoBarras, "codigo de barras");
-  console.log(productSearch, "productSearch");
-
   return (
     <>
-      <Modal open={openCreate} onClose={handleOpenCloseCreate}>
+      <Modal open={openCreateAgru} onClose={handleOpenCloseCreateAgru}>
         <Box
           sx={{
             position: "absolute",
@@ -83,7 +77,6 @@ export default function CreateAgrupamiento({ openCreate, setOpenCreate }) {
               name="contacto"
               label="Contacto"
               variant="filled"
-              onChange={handleChangeSearch}
               sx={{ mr: 0.5 }}
             />
             <TextField
@@ -115,7 +108,7 @@ export default function CreateAgrupamiento({ openCreate, setOpenCreate }) {
             }}
           >
             <Button
-              onClick={handleOpenCloseCreate}
+              onClick={handleOpenCloseCreateAgru}
               variant="contained"
               color="error"
               sx={{ mr: 0.5, ml: 0.5 }}

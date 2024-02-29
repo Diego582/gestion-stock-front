@@ -2,18 +2,23 @@ import {
   Box,
   Button,
   Divider,
+  MenuItem,
   Modal,
   TextField,
   Typography,
+  IconButton,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import product_actions from "../store/actions/products";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import CreateAgrupamiento from "./CreateAgrupamiento";
 const { read_product, read_products } = product_actions;
 
 export default function CreateProduct({ openCreate, setOpenCreate }) {
   const dispatch = useDispatch();
   const productSearch = useSelector((store) => store.products.product);
+  const [openCreateAgru, setOpenCreateAgru] = useState(false);
 
   const currencies = [
     {
@@ -54,6 +59,9 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
     setOpenCreate(!openCreate);
   };
 
+  const handleOpenCloseCreateAgru = () => {
+    setOpenCreateAgru(!openCreateAgru);
+  };
   const handlePost = (codigo) => {
     dispatch(read_product(codigo));
   };
@@ -88,30 +96,29 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
             Crear nuevo Producto
           </Typography>
           <Box sx={{ width: "100%", mt: 1, pt: 1 }}>
-            <TextField
-              fullWidth
-              required
-              label="Agrupamiento"
-              variant="filled"
-              onChange={handleChange}
-              sx={{ m: 0.5, p: 0.5 }}
-            />
-
-            <TextField
-              id="outlined-select-currency"
-              name="agrupamiento"
-              select
-              label="Agrupamiento"
-              defaultValue=""
-              helperText="Selecciona un Agrupamiento"
-            >
-              {currencies.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-
+            <Box sx={{ display: "flex", width: "100%", alignItems: "center" }}>
+              <TextField
+                autoFocus
+                required
+                fullWidth
+                name="agrupamiento"
+                select
+                label="Agrupamiento"
+                variant="filled"
+                onChange={handleChange}
+                defaultValue=""
+                sx={{ m: 0.5, p: 0.5 }}
+              >
+                {currencies.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <IconButton onClick={handleOpenCloseCreateAgru}>
+                <AddCircleIcon fontSize="large" />
+              </IconButton>
+            </Box>
             <Box
               sx={{
                 width: "100%",
@@ -122,7 +129,6 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
               }}
             >
               <TextField
-                autoFocus
                 fullWidth
                 required
                 name="codigoBarras"
@@ -132,12 +138,14 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
                 sx={{ mr: 0.5 }}
               />
               <TextField
-                name="descripcion"
+                name="categoria"
+                disabled
                 fullWidth
                 required
-                label="Descripcion"
+                label="Categoria"
                 variant="filled"
                 onChange={handleChange}
+                inputProps={{ maxLength: 8 }}
                 sx={{ ml: 0.5 }}
               />
             </Box>
@@ -151,14 +159,13 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
               }}
             >
               <TextField
-                name="categoria"
+                name="descripcion"
+                disabled
                 fullWidth
                 required
-                label="Categoria"
+                label="Descripcion"
                 variant="filled"
                 onChange={handleChange}
-                inputProps={{ maxLength: 8 }}
-                sx={{ mr: 0.5 }}
               />
             </Box>
           </Box>
@@ -189,6 +196,10 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
             </Button>
           </Box>
         </Box>
+       {/*  <CreateAgrupamiento
+          openCreateAgru={openCreateAgru}
+          setOpenCreateAgru={handleOpenCloseCreateAgru}
+        /> */}
       </Modal>
     </>
   );
