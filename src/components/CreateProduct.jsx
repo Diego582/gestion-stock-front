@@ -12,37 +12,28 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import product_actions from "../store/actions/products";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import CreateAgrupamiento from "./CreateAgrupamiento";
+import CreateGrouping from "./CreateGrouping";
+import grouping_actions from "../store/actions/groupings";
+import productBase_actions from "../store/actions/productBase";
+
 const { read_product, read_products } = product_actions;
+const { read_groupings } = grouping_actions;
+const { read_products_base } = productBase_actions;
 
 export default function CreateProduct({ openCreate, setOpenCreate }) {
   const dispatch = useDispatch();
   const productSearch = useSelector((store) => store.products.product);
+  const currencies = useSelector((store) => store.groupings.groupings);
+  const productBase = useSelector((store) => store.productBase.productBase);
+
   const [openCreateAgru, setOpenCreateAgru] = useState(false);
-
-  const currencies = [
-    {
-      value: "USD",
-      label: "$",
-    },
-    {
-      value: "EUR",
-      label: "€",
-    },
-    {
-      value: "BTC",
-      label: "฿",
-    },
-    {
-      value: "JPY",
-      label: "¥",
-    },
-  ];
-
   const [codigoBarras, setCodigoBarras] = useState("");
+
+  const [product, setProduct] = useState({});
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProducto((prevState) => ({
+    setProduct((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -62,19 +53,34 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
   const handleOpenCloseCreateAgru = () => {
     setOpenCreateAgru(!openCreateAgru);
   };
-  const handlePost = (codigo) => {
-    dispatch(read_product(codigo));
+  const handlePost = () => {
+    let productPost = {
+      codigoBarras: codigoBarras.codigoBarras,
+      descripcion: productBase[0].descripcion,
+      categoria: productBase[0].categoria,
+      agrupamiento: product.agrupamiento,
+    };
+    console.log(productPost, "productPost");
+    /*  dispatch(read_product(codigo)); */
   };
 
   useEffect(() => {
-    dispatch(read_product(codigoBarras));
+    dispatch(read_groupings());
+    dispatch(read_products_base(codigoBarras));
   }, [codigoBarras]);
 
   console.log(codigoBarras, "codigo de barras");
   console.log(productSearch, "productSearch");
+  console.log(product, "product");
+  console.log(productBase, "productBase");
+
   return (
     <>
-      <Modal open={openCreate} onClose={handleOpenCloseCreate}>
+      <Modal
+        open={openCreate}
+        onClose={handleOpenCloseCreate}
+        sx={{ zIndex: 100 }}
+      >
         <Box
           sx={{
             position: "absolute",
@@ -110,13 +116,13 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
                 sx={{ m: 0.5, p: 0.5 }}
               >
                 {currencies.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
+                  <MenuItem key={option._id} value={option.descripcion}>
+                    {option.descripcion}
                   </MenuItem>
                 ))}
               </TextField>
               <IconButton onClick={handleOpenCloseCreateAgru}>
-                <AddCircleIcon fontSize="large" />
+                <AddCircleIcon fontSize="large" color="secondary" />
               </IconButton>
             </Box>
             <Box
@@ -139,7 +145,8 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
               />
               <TextField
                 name="categoria"
-                disabled
+                focused
+                value={productBase[0] && productBase[0].categoria}
                 fullWidth
                 required
                 label="Categoria"
@@ -160,8 +167,9 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
             >
               <TextField
                 name="descripcion"
-                disabled
+                value={productBase[0] && productBase[0].descripcion}
                 fullWidth
+                focused
                 required
                 label="Descripcion"
                 variant="filled"
@@ -187,20 +195,21 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
               Cancelar
             </Button>
             <Button
+              sx={{ color: "white" }}
               type="submit"
               variant="contained"
-              color="success"
+              color="info"
               onClick={() => handlePost(codigoBarras)}
             >
               Verificar
             </Button>
           </Box>
         </Box>
-       {/*  <CreateAgrupamiento
-          openCreateAgru={openCreateAgru}
-          setOpenCreateAgru={handleOpenCloseCreateAgru}
-        /> */}
       </Modal>
+      <CreateGrouping
+        openCreateAgru={openCreateAgru}
+        setOpenCreateAgru={handleOpenCloseCreateAgru}
+      />
     </>
   );
 }

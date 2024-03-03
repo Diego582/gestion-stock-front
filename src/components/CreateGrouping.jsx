@@ -2,40 +2,62 @@ import {
   Box,
   Button,
   Divider,
-  MenuItem,
   Modal,
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { useEffect } from "react";
+import grouping_actions from "../store/actions/groupings";
+import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
+const { create_grouping } = grouping_actions;
 
-export default function CreateAgrupamiento({
-  openCreateAgru,
-  setOpenCreateAgru,
-}) {
+export default function CreateGrouping({ openCreateAgru, setOpenCreateAgru }) {
   const dispatch = useDispatch();
-  const productSearch = useSelector((store) => store.products.product);
-  const [codigoBarras, setCodigoBarras] = useState("");
+
+  const [grouping, setGrouping] = useState({});
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProducto((prevState) => ({
+    setGrouping((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
+  console.log(grouping, "grouping en modal argu");
 
   const handleOpenCloseCreateAgru = () => {
     setOpenCreateAgru(!openCreateAgru);
   };
+  const currencies = useSelector((store) => store.groupings);
+  console.log(currencies, "store de grouping");
+  const handlePost = (grouping) => {
+    dispatch(create_grouping(grouping))
+      .then((res) => {
+        console.log(res.payload, "payload de create grouping");
+        if (res.payload.grouping.descripcion) {
+          console.log("ingreso por true");
+          Swal.fire({
+            icon: "success",
+            title: "Carga Exitosa!",
+          });
+          setGrouping({});
+        } else if (res.payload.messages.length > 0) {
+          console.log("ingreso por false");
+          Swal.fire({
+            title: "Something went wrong!",
+            icon: "error",
+            html: res.payload.messages.map((each) => `<p>${each}<p>`),
+          });
+        }
+      })
+      .catch((err) => {});
 
-  const handlePost = (codigo) => {
-    dispatch(read_product(codigo));
+    handleOpenCloseCreateAgru();
   };
 
-  useEffect(() => {
-    dispatch(read_product(codigoBarras));
-  }, [codigoBarras]);
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -55,12 +77,13 @@ export default function CreateAgrupamiento({
             display: "grid",
             alignContent: "space-around",
             justifyItems: "center",
+            backgroundColor: "rgba(155, 138, 112, 1)",
           }}
         >
-          <Typography variant="h4" color="secondary">
+          <Typography variant="h4" color="primary">
             Crear nuevo Agrupamiento
           </Typography>
-          <Box sx={{ width: "100%", mt: 1, pt: 1 }}>
+          <Box sx={{ width: "100%" }}>
             <TextField
               autoFocus
               name="descripcion"
@@ -68,8 +91,9 @@ export default function CreateAgrupamiento({
               required
               label="Descripcion"
               variant="filled"
+              inputProps={{ maxLength: 20 }}
               onChange={handleChange}
-              sx={{ ml: 0.5 }}
+              sx={{ backgroundColor: "white", borderRadius: "10px" }}
             />
             <TextField
               fullWidth
@@ -77,7 +101,9 @@ export default function CreateAgrupamiento({
               name="contacto"
               label="Contacto"
               variant="filled"
-              sx={{ mr: 0.5 }}
+              onChange={handleChange}
+              inputProps={{ maxLength: 20 }}
+              sx={{ mt: 1, backgroundColor: "white", borderRadius: "10px" }}
             />
             <TextField
               name="telefono"
@@ -86,17 +112,19 @@ export default function CreateAgrupamiento({
               label="Telefono"
               variant="filled"
               onChange={handleChange}
-              sx={{ ml: 0.5 }}
+              inputProps={{ maxLength: 10 }}
+              sx={{ mt: 1, backgroundColor: "white", borderRadius: "10px" }}
             />
 
             <TextField
+              type="email"
               name="email"
               fullWidth
               required
               label="E-mail"
               variant="filled"
               onChange={handleChange}
-              sx={{ ml: 0.5 }}
+              sx={{ mt: 1, backgroundColor: "white", borderRadius: "10px" }}
             />
           </Box>
           <Divider />
@@ -116,12 +144,12 @@ export default function CreateAgrupamiento({
               Cancelar
             </Button>
             <Button
+              onClick={() => handlePost(grouping)}
               type="submit"
               variant="contained"
               color="success"
-              onClick={() => handlePost(codigoBarras)}
             >
-              Verificar
+              Guardar
             </Button>
           </Box>
         </Box>
