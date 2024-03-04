@@ -146,12 +146,11 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
               <TextField
                 name="categoria"
                 focused
-                value={productBase[0] && productBase[0].categoria}
+                value={productBase && productBase.categoria}
                 fullWidth
                 required
                 label="Categoria"
                 variant="filled"
-                onChange={handleChange}
                 inputProps={{ maxLength: 8 }}
                 sx={{ ml: 0.5 }}
               />
@@ -167,13 +166,12 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
             >
               <TextField
                 name="descripcion"
-                value={productBase[0] && productBase[0].descripcion}
+                value={productBase && productBase.descripcion}
                 fullWidth
                 focused
                 required
                 label="Descripcion"
                 variant="filled"
-                onChange={handleChange}
               />
             </Box>
           </Box>
