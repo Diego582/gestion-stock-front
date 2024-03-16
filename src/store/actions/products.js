@@ -5,12 +5,13 @@ import apiUrl from "../../apiUrl";
 const read_products = createAsyncThunk("read_products", async (obj) => {
   //callback que realiza la petición
   try {
-    let data = await axios(apiUrl + "products?codigoBarras=" + obj.descripcion);
+    let data = await axios(apiUrl + "products");
 
     return {
       products: data.data.response,
     };
   } catch (error) {
+    console.log(error);
     return {
       products: [],
     };
@@ -35,31 +36,32 @@ const read_product = createAsyncThunk("read_product", async (obj) => {
   }
 });
 
-/* const create_customer = createAsyncThunk(
-  "create_customer", //nombre de la accion
+const create_product = createAsyncThunk(
+  "create_product", //nombre de la accion
   async (obj) => {
     //callback que realiza la petición
     try {
-      let data = await axios.post(apiUrl + "customers", obj);
+      console.log(obj, "esto llego a products");
+      let data = await axios.post(apiUrl + "products", obj);
       return {
-        customer: data.data.response,
+        product: data.data.response,
         messages: [],
       };
     } catch (error) {
       return {
-        customer: false,
+        product: false,
         messages: error.response.data.messages || [error.response.data.message],
       };
     }
   }
-); */
+);
 
-/* const destroy_customer = createAsyncThunk(
-  "destroy_customer", //nombre de la accion
+const destroy_product = createAsyncThunk(
+  "destroy_product", //nombre de la accion
   async (obj) => {
     //callback que realiza la petición
     try {
-      let data = await axios.delete(apiUrl + "customers/" + obj._id);
+      let data = await axios.delete(apiUrl + "products/" + obj._id);
 
       return {
         customer: data.data.response,
@@ -72,7 +74,12 @@ const read_product = createAsyncThunk("read_product", async (obj) => {
       };
     }
   }
-); */
+);
 
-const product_actions = { read_products, read_product };
+const product_actions = {
+  read_products,
+  read_product,
+  create_product,
+  destroy_product,
+};
 export default product_actions;

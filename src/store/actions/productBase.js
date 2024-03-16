@@ -22,24 +22,24 @@ const read_products_base = createAsyncThunk(
   }
 );
 
-/* const create_customer = createAsyncThunk(
-  "create_customer", //nombre de la accion
+const create_product_base = createAsyncThunk(
+  "create_product_base", //nombre de la accion
   async (obj) => {
     //callback que realiza la petición
     try {
-      let data = await axios.post(apiUrl + "customers", obj);
+      let data = await axios.post(apiUrl + "productsbase", obj);
       return {
-        customer: data.data.response,
+        productBase: data.data.response,
         messages: [],
       };
     } catch (error) {
       return {
-        customer: false,
+        productBase: false,
         messages: error.response.data.messages || [error.response.data.message],
       };
     }
   }
-); */
+);
 
 /* const destroy_customer = createAsyncThunk(
   "destroy_customer", //nombre de la accion
@@ -61,5 +61,5 @@ const read_products_base = createAsyncThunk(
   }
 ); */
 
-const productBase_actions = { read_products_base };
+const productBase_actions = { read_products_base, create_product_base };
 export default productBase_actions;
