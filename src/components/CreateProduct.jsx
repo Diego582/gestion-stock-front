@@ -15,8 +15,9 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CreateGrouping from "./CreateGrouping";
 import grouping_actions from "../store/actions/groupings";
 import productBase_actions from "../store/actions/productBase";
+import Swal from "sweetalert2";
 
-const { read_product, read_products } = product_actions;
+const { read_product, read_products, create_product } = product_actions;
 const { read_groupings } = grouping_actions;
 const { read_products_base } = productBase_actions;
 
@@ -56,12 +57,44 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
   const handlePost = () => {
     let productPost = {
       codigoBarras: codigoBarras.codigoBarras,
-      descripcion: productBase[0].descripcion,
-      categoria: productBase[0].categoria,
+      descripcion: productBase.descripcion,
+      categoria: productBase.categoria,
       agrupamiento: product.agrupamiento,
     };
     console.log(productPost, "productPost");
-    /*  dispatch(read_product(codigo)); */
+    dispatch(create_product(productPost))
+      .then((res) => {
+        if (res.payload.product.descripcion) {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Carga Exitosa!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+
+          setCodigoBarras(0);
+        } else if (res.payload.messages.length > 0) {
+          console.log("ingreso por false");
+          Swal.fire({
+            title: "Something went wrong!",
+            icon: "error",
+            html: res.payload.messages.map((each) => `<p>${each}<p>`),
+          });
+        }
+      })
+      .catch((err) => {});
+  };
+
+  const handlePostNew = () => {
+    let productPostNew = {
+      codigoBarras: codigoBarras.codigoBarras,
+      descripcion: product.descripcion,
+      categoria: product.categoria,
+      agrupamiento: product.agrupamiento,
+    };
+    console.log(productPostNew, "productPostNew");
+    /*  dispatch(read_product(productPostNew)); */
   };
 
   useEffect(() => {
@@ -141,19 +174,34 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
                 label="Codigo de Barras"
                 variant="filled"
                 onChange={handleChangeSearch}
+                inputProps={{ maxLength: 13 }}
                 sx={{ mr: 0.5 }}
               />
-              <TextField
-                name="categoria"
-                focused
-                value={productBase && productBase.categoria}
-                fullWidth
-                required
-                label="Categoria"
-                variant="filled"
-                inputProps={{ maxLength: 8 }}
-                sx={{ ml: 0.5 }}
-              />
+              {productBase ? (
+                <TextField
+                  name="categoria"
+                  focused
+                  value={productBase && productBase.categoria}
+                  fullWidth
+                  required
+                  label="Categoria"
+                  variant="filled"
+                  inputProps={{ maxLength: 8 }}
+                  sx={{ ml: 0.5 }}
+                />
+              ) : (
+                <TextField
+                  name="categoria"
+                  focused
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                  label="Categoria"
+                  variant="filled"
+                  inputProps={{ maxLength: 8 }}
+                  sx={{ ml: 0.5 }}
+                />
+              )}
             </Box>
             <Box
               sx={{
@@ -164,15 +212,27 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
                 p: 0.5,
               }}
             >
-              <TextField
-                name="descripcion"
-                value={productBase && productBase.descripcion}
-                fullWidth
-                focused
-                required
-                label="Descripcion"
-                variant="filled"
-              />
+              {productBase ? (
+                <TextField
+                  name="descripcion"
+                  value={productBase && productBase.descripcion}
+                  fullWidth
+                  focused
+                  required
+                  label="Descripcion"
+                  variant="filled"
+                />
+              ) : (
+                <TextField
+                  name="descripcion"
+                  onChange={handleChange}
+                  fullWidth
+                  focused
+                  required
+                  label="Descripcion"
+                  variant="filled"
+                />
+              )}
             </Box>
           </Box>
 
@@ -192,15 +252,27 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
             >
               Cancelar
             </Button>
-            <Button
-              sx={{ color: "white" }}
-              type="submit"
-              variant="contained"
-              color="info"
-              onClick={() => handlePost(codigoBarras)}
-            >
-              Verificar
-            </Button>
+            {productBase ? (
+              <Button
+                sx={{ color: "white" }}
+                type="submit"
+                variant="contained"
+                color="info"
+                onClick={() => handlePost(codigoBarras)}
+              >
+                Verificar
+              </Button>
+            ) : (
+              <Button
+                sx={{ color: "white" }}
+                type="submit"
+                variant="contained"
+                color="success"
+                onClick={() => handlePostNew(codigoBarras)}
+              >
+                Cargar
+              </Button>
+            )}
           </Box>
         </Box>
       </Modal>
