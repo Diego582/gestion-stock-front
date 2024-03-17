@@ -19,7 +19,7 @@ import Swal from "sweetalert2";
 
 const { read_product, read_products, create_product } = product_actions;
 const { read_groupings } = grouping_actions;
-const { read_products_base } = productBase_actions;
+const { read_products_base, create_product_base } = productBase_actions;
 
 export default function CreateProduct({ openCreate, setOpenCreate }) {
   const dispatch = useDispatch();
@@ -57,8 +57,12 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
   const handlePost = () => {
     let productPost = {
       codigoBarras: codigoBarras.codigoBarras,
-      descripcion: productBase.descripcion,
-      categoria: productBase.categoria,
+      descripcion: productBase.descripcion
+        ? productBase.descripcion
+        : product.descripcion,
+      categoria: productBase.categoria
+        ? productBase.categoria
+        : product.categoria,
       agrupamiento: product.agrupamiento,
     };
     console.log(productPost, "productPost");
@@ -94,19 +98,36 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
       agrupamiento: product.agrupamiento,
     };
     console.log(productPostNew, "productPostNew");
-    /*  dispatch(read_product(productPostNew)); */
+    dispatch(create_product_base(productPostNew))
+      .then((res) => {
+        console.log(res.payload, "payload de productBase");
+        if (res.payload.productBase.descripcion) {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Carga Exitosa a BBDD!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          handlePost();
+        } else if (res.payload.messages.length > 0) {
+          console.log("ingreso por false");
+          Swal.fire({
+            title: "Something went wrong!",
+            icon: "error",
+            html: res.payload.messages.map((each) => `<p>${each}<p>`),
+          });
+        }
+      })
+      .catch((err) => {});
   };
 
   useEffect(() => {
     dispatch(read_groupings());
     dispatch(read_products_base(codigoBarras));
   }, [codigoBarras]);
-
-  console.log(codigoBarras, "codigo de barras");
-  console.log(productSearch, "productSearch");
-  console.log(product, "product");
-  console.log(productBase, "productBase");
-
+  console.log(productBase, "productBase estado");
+  console.log(product, "product state");
   return (
     <>
       <Modal
@@ -173,7 +194,7 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
                 name="codigoBarras"
                 label="Codigo de Barras"
                 variant="filled"
-                onChange={handleChangeSearch}
+                onBlur={handleChangeSearch}
                 inputProps={{ maxLength: 13 }}
                 sx={{ mr: 0.5 }}
               />

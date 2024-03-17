@@ -57,17 +57,17 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
   };
 
   const handleOpenCloseEdit = (product) => {
-    console.log(product, " esto ingreso edit ");
+    
   };
 
   const handleOpenCloseDelete = (product) => {
-    console.log(product, " esto ingreso delete ");
+    
   };
 
   useEffect(() => {
     dispatch(read_products());
   }, []);
-  console.log(data, "data de products");
+ 
   return (
     <>
       {data && data.length > 0 ? (
