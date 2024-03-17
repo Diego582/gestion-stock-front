@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import CreateProduct from "./CreateProduct";
 import product_actions from "../store/actions/products";
+import DeleteProduct from "./DeleteProduct";
 
 const { read_products } = product_actions;
 
@@ -29,6 +30,7 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
   const data = useSelector((store) => store.products.products);
   const [product, setProduct] = useState("");
   const [codigoBarras, setCodigoBarras] = useState({});
+  const [openDelete, setOpenDelete] = useState(false);
 
   const columns = [
     {
@@ -52,22 +54,23 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
 
   const [producto, setProducto] = useState({});
   const handleSelected = (product, option) => {
+    console.log("ingreso a handleselect");
     setProduct(product);
     option === "Edit" ? handleOpenCloseEdit() : handleOpenCloseDelete();
   };
 
-  const handleOpenCloseEdit = (product) => {
-    
-  };
+  const handleOpenCloseEdit = (product) => {};
 
-  const handleOpenCloseDelete = (product) => {
-    
+  const handleOpenCloseDelete = () => {
+    console.log("ingreso a handleOpenCloseDelete");
+
+    setOpenDelete(!openDelete);
   };
 
   useEffect(() => {
     dispatch(read_products());
   }, []);
- 
+
   return (
     <>
       {data && data.length > 0 ? (
@@ -125,6 +128,12 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
       )}
 
       <CreateProduct openCreate={openCreate} setOpenCreate={setOpenCreate} />
+      <DeleteProduct
+        openDelete={openDelete}
+        setOpenDelete={setOpenDelete}
+        product={product}
+        setProduct={setProduct}
+      />
     </>
   );
 }
