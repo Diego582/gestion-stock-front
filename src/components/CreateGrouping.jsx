@@ -25,26 +25,22 @@ export default function CreateGrouping({ openCreateAgru, setOpenCreateAgru }) {
       [name]: value,
     }));
   };
-  console.log(grouping, "grouping en modal argu");
 
   const handleOpenCloseCreateAgru = () => {
     setOpenCreateAgru(!openCreateAgru);
   };
   const currencies = useSelector((store) => store.groupings);
-  console.log(currencies, "store de grouping");
+
   const handlePost = (grouping) => {
     dispatch(create_grouping(grouping))
       .then((res) => {
-        console.log(res.payload, "payload de create grouping");
         if (res.payload.grouping.descripcion) {
-          console.log("ingreso por true");
           Swal.fire({
             icon: "success",
             title: "Carga Exitosa!",
           });
           setGrouping({});
         } else if (res.payload.messages.length > 0) {
-          console.log("ingreso por false");
           Swal.fire({
             title: "Something went wrong!",
             icon: "error",

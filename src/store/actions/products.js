@@ -11,7 +11,7 @@ const read_products = createAsyncThunk("read_products", async (obj) => {
       products: data.data.response,
     };
   } catch (error) {
-    console.log(error);
+
     return {
       products: [],
     };
@@ -21,7 +21,7 @@ const read_products = createAsyncThunk("read_products", async (obj) => {
 const read_product = createAsyncThunk("read_product", async (obj) => {
   //callback que realiza la petición
   try {
-    console.log(obj.codigoBarras, "obj.codigoBarras");
+
     let data = await axios(
       apiUrl + "products?codigoBarras=" + obj.codigoBarras
     );
@@ -41,7 +41,7 @@ const create_product = createAsyncThunk(
   async (obj) => {
     //callback que realiza la petición
     try {
-      console.log(obj, "esto llego a products");
+
       let data = await axios.post(apiUrl + "products", obj);
       return {
         product: data.data.response,

@@ -41,6 +41,8 @@ const create_product_base = createAsyncThunk(
   }
 );
 
+
+
 /* const destroy_customer = createAsyncThunk(
   "destroy_customer", //nombre de la accion
   async (obj) => {
