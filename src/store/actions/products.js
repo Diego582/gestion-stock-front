@@ -64,7 +64,7 @@ const destroy_product = createAsyncThunk(
       let data = await axios.delete(apiUrl + "products/" + obj._id);
 
       return {
-        customer: data.data.response,
+        product: data.data.response,
         messages: [],
       };
     } catch (error) {
