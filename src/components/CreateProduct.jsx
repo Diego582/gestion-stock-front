@@ -77,7 +77,7 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
             timer: 1500,
           });
 
-          setCodigoBarras(0);
+          setCodigoBarras("");
         } else if (res.payload.messages.length > 0) {
           console.log("ingreso por false");
           Swal.fire({
@@ -128,6 +128,8 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
   }, [codigoBarras]);
   console.log(productBase, "productBase estado");
   console.log(product, "product state");
+  console.log(codigoBarras, "codigoBarras state");
+
   return (
     <>
       <Modal
