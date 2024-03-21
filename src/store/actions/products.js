@@ -1,11 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import apiUrl from "../../apiUrl";
+import apiUrl from "../../utils/apiUrl";
 
 const read_products = createAsyncThunk("read_products", async (obj) => {
   //callback que realiza la petición
+
+
   try {
-    let data = await axios(apiUrl + "products");
+    let data = await axios(apiUrl + "products?descripcion=" + obj.descripcion);
 
     return {
       products: data.data.response,

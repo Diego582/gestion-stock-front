@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import apiUrl from "../../apiUrl";
+import apiUrl from "../../utils/apiUrl";
 //agrupamientos
 const read_groupings = createAsyncThunk("read_groupings", async (obj) => {
   //callback que realiza la petición

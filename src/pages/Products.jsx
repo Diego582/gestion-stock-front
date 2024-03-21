@@ -1,15 +1,30 @@
 import { Box, Button, TextField } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TableProductos from "../components/TableProductos";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import products_actions from "../store/actions/products";
+import { useDispatch } from "react-redux";
+
+const { read_products } = products_actions;
 
 const Products = () => {
+  const dispatch = useDispatch();
   const [openCreate, setOpenCreate] = useState(false);
-
+  const [search, setSearch] = useState({ descripcion: "" });
   const handleOpenCloseCreate = () => {
     setOpenCreate(!openCreate);
   };
-  const handleFilter = () => {};
+  const handleFilter = (e) => {
+    const { name, value } = e.target;
+    setSearch((prevState) => ({
+      ...prevState,
+      [name]: value.trim(),
+    }));
+  };
+
+  useEffect(() => {
+    dispatch(read_products(search));
+  }, [search]);
 
   return (
     <Box
@@ -47,7 +62,7 @@ const Products = () => {
           label="Buscar Producto por Nombre"
           type="search"
           variant="filled"
-          name="lastName"
+          name="descripcion"
           onKeyUp={handleFilter}
           fullWidth
         />
