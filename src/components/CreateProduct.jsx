@@ -28,7 +28,7 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
   const productBase = useSelector((store) => store.productBase.productBase);
 
   const [openCreateAgru, setOpenCreateAgru] = useState(false);
-  const [codigoBarras, setCodigoBarras] = useState("");
+  const [codigoBarras, setCodigoBarras] = useState({ codigoBarras: '' });
 
   const [product, setProduct] = useState({});
 
@@ -76,8 +76,8 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
             showConfirmButton: false,
             timer: 1500,
           });
-
-          setCodigoBarras("");
+          /* codigoBarras.focus(); */
+          setCodigoBarras({ codigoBarras: "" });
         } else if (res.payload.messages.length > 0) {
           console.log("ingreso por false");
           Swal.fire({

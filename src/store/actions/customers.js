@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import apiUrl from "../../apiUrl";
+import apiUrl from "../../utils/apiUrl";
 
 const read_customers = createAsyncThunk("read_customers", async (obj) => {
   //callback que realiza la petición

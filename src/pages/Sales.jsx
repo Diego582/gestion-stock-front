@@ -1,5 +1,5 @@
 import NavSales from "../components/NavSales";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import TableVentas from "../components/TableVentas";
 
 const Sales = () => {
@@ -7,7 +7,10 @@ const Sales = () => {
     <Box sx={{ display: "flex", flexWrap: "wrap" }}>
       <NavSales />
       <Box sx={{ height: "82vh" }}>
-        <TableVentas />
+      <Typography variant="h4" color="initial">
+        Reservado para ventas
+      </Typography>
+        {/* <TableVentas /> */}
       </Box>
     </Box>
   );

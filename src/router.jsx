@@ -8,11 +8,16 @@ import Shopping from "./pages/Shopping";
 import Customer from "./pages/Customer";
 import Reports from "./pages/Reports";
 import Products from "./pages/Products";
+import Private from "./utils/Private";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: (
+      <Private>
+        <MainLayout />
+      </Private>
+    ),
     children: [
       {
         path: "/",

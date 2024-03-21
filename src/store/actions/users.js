@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import apiUrl from "../../apiUrl";
+import apiUrl from "../../utils/apiUrl";
 
 const signin = createAsyncThunk("signin", async (obj) => {
   try {

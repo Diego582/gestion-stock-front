@@ -28,13 +28,24 @@ const SignIn = () => {
           pt: { xs: 10 },
         }}
       >
-        <Typography
-          variant="h3"
-          color="textFielfWhite.main"
-          sx={{ m: 2, textAlign: "center" }}
+        <Box
+          sx={{
+            backgroundColor: "rgba(64, 39, 61, 0.8)",
+            borderRadius: "10px",
+          }}
         >
-          {company}
-        </Typography>
+          <Typography
+            variant="h3"
+            color="textFielfWhite.main"
+            sx={{
+              m: 2,
+              textAlign: "center",
+              textShadow: "1px 1px 2px black",
+            }}
+          >
+            {company}
+          </Typography>
+        </Box>
         <CardSigin />
       </Box>
     </Box>
