@@ -26,7 +26,7 @@ export default function DeleteProduct({
   const handleDelete = () => {
     dispatch(destroy_product(product))
       .then((res) => {
-        console.log(res.payload, "payload de productDelete");
+        
         if (res.payload.product) {
           Swal.fire({
             position: "top-end",
