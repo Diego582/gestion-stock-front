@@ -7,6 +7,7 @@ import {
   TextField,
   Typography,
   IconButton,
+  InputAdornment,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,11 +16,13 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CreateGrouping from "./CreateGrouping";
 import grouping_actions from "../store/actions/groupings";
 import productBase_actions from "../store/actions/productBase";
+import price_actions from "../store/actions/prices";
 import Swal from "sweetalert2";
 
 const { read_product, read_products, create_product } = product_actions;
 const { read_groupings } = grouping_actions;
 const { read_products_base, create_product_base } = productBase_actions;
+const { create_price } = price_actions;
 
 export default function CreateProduct({ openCreate, setOpenCreate }) {
   const dispatch = useDispatch();
@@ -28,7 +31,7 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
   const productBase = useSelector((store) => store.productBase.productBase);
 
   const [openCreateAgru, setOpenCreateAgru] = useState(false);
-  const [codigoBarras, setCodigoBarras] = useState({ codigoBarras: '' });
+  const [codigoBarras, setCodigoBarras] = useState({ codigoBarras: "" });
 
   const [product, setProduct] = useState({});
 
@@ -54,6 +57,9 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
   const handleOpenCloseCreateAgru = () => {
     setOpenCreateAgru(!openCreateAgru);
   };
+
+  const handlePostPrice = () => {};
+
   const handlePost = () => {
     let productPost = {
       codigoBarras: codigoBarras.codigoBarras,
@@ -65,27 +71,35 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
         : product.categoria,
       agrupamiento: product.agrupamiento,
     };
-    console.log(productPost, "productPost");
-    dispatch(create_product(productPost))
+    let price = {
+      value: product.price > 0 ? product.price : 0,
+      currency: "Pesos",
+    };
+
+    dispatch(create_price(price))
       .then((res) => {
-        if (res.payload.product.descripcion) {
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Carga Exitosa!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          /* codigoBarras.focus(); */
-          setCodigoBarras({ codigoBarras: "" });
-        } else if (res.payload.messages.length > 0) {
-          console.log("ingreso por false");
-          Swal.fire({
-            title: "Something went wrong!",
-            icon: "error",
-            html: res.payload.messages.map((each) => `<p>${each}<p>`),
-          });
-        }
+        productPost.prices = res.payload.price;
+        dispatch(create_product(productPost))
+          .then((res) => {
+            if (res.payload) {
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Carga Exitosa!",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              /* codigoBarras.focus(); */
+              setCodigoBarras({ codigoBarras: "" });
+            } else if (res.payload.messages.length > 0) {
+              Swal.fire({
+                title: "Something went wrong!",
+                icon: "error",
+                html: res.payload.messages.map((each) => `<p>${each}<p>`),
+              });
+            }
+          })
+          .catch((err) => {});
       })
       .catch((err) => {});
   };
@@ -97,10 +111,9 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
       categoria: product.categoria,
       agrupamiento: product.agrupamiento,
     };
-    console.log(productPostNew, "productPostNew");
+
     dispatch(create_product_base(productPostNew))
       .then((res) => {
-        console.log(res.payload, "payload de productBase");
         if (res.payload.productBase.descripcion) {
           Swal.fire({
             position: "top-end",
@@ -111,7 +124,6 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
           });
           handlePost();
         } else if (res.payload.messages.length > 0) {
-          console.log("ingreso por false");
           Swal.fire({
             title: "Something went wrong!",
             icon: "error",
@@ -126,9 +138,6 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
     dispatch(read_groupings());
     dispatch(read_products_base(codigoBarras));
   }, [codigoBarras]);
-  console.log(productBase, "productBase estado");
-  console.log(product, "product state");
-  console.log(codigoBarras, "codigoBarras state");
 
   return (
     <>
@@ -257,6 +266,21 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
                 />
               )}
             </Box>
+            <TextField
+              name="price"
+              focused
+              onChange={handleChange}
+              fullWidth
+              required
+              label="Precio"
+              variant="filled"
+              sx={{ ml: 0.5 }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">$</InputAdornment>
+                ),
+              }}
+            />
           </Box>
 
           <Divider />

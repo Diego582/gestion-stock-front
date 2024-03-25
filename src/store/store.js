@@ -4,6 +4,8 @@ import customer_reducer from "./reducer/customers";
 import product_reducer from "./reducer/products";
 import grouping_reducer from "./reducer/groupings";
 import productBase_reducer from "./reducer/productBase";
+import prices_reducer from "./reducer/prices";
+
 
 export default configureStore({
   reducer: {
@@ -12,5 +14,6 @@ export default configureStore({
     products: product_reducer,
     groupings: grouping_reducer,
     productBase: productBase_reducer,
+    prices: prices_reducer,
   },
 });

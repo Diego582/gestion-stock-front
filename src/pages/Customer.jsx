@@ -56,7 +56,6 @@ const Customer = () => {
     cuit: "",
   });
   const customers = useSelector((store) => store.customers.customers);
-  const stores = useSelector((store) => store);
   const conditions = [
     "Responsable Inscripto",
     "Monotributista",

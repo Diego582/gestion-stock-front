@@ -25,7 +25,6 @@ export default function CardSigin() {
   const navigate = useNavigate();
   const handleStep = () => {
     setStep(1);
-    document.getElementById("password").focus();
   };
   const [data, setData] = useState({
     mail: "",
@@ -91,9 +90,8 @@ export default function CardSigin() {
           </Typography>
 
           <TextField
-            autoFocus="true"
             name="mail"
-            id="standard-password-input"
+            id="email"
             label="Email"
             type="email"
             variant="standard"
@@ -157,7 +155,6 @@ export default function CardSigin() {
           >
             <TextField
               type={showPassword ? "text" : "password"}
-              autoFocus="true"
               id="password"
               name="password"
               onChange={handleChange}

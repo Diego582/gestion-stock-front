@@ -49,12 +49,15 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
       field: "agrupamiento",
       headerName: "Agrupamiento",
     },
+    {
+      field: "prices[0]",
+      headerName: "Precio",
+    },
     { field: "actions", headerName: "Acciones" },
   ];
 
   const [producto, setProducto] = useState({});
   const handleSelected = (product, option) => {
-    console.log("ingreso a handleselect");
     setProduct(product);
     option === "Edit" ? handleOpenCloseEdit() : handleOpenCloseDelete();
   };
@@ -62,15 +65,14 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
   const handleOpenCloseEdit = (product) => {};
 
   const handleOpenCloseDelete = () => {
-    console.log("ingreso a handleOpenCloseDelete");
-
     setOpenDelete(!openDelete);
   };
 
   useEffect(() => {
     dispatch(read_products());
   }, []);
-
+  console.log(data, "data product");
+ 
   return (
     <>
       {data && data.length > 0 ? (
@@ -81,7 +83,7 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
                 {columns.map((column, index) => {
                   return (
                     <TableCell key={index} sx={{ p: 2 }}>
-                      {column.headerName}{" "}
+                      {column.headerName}
                     </TableCell>
                   );
                 })}
@@ -89,6 +91,7 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
             </TableHead>
             <TableBody>
               {data.map((item, index) => (
+                 
                 <TableRow
                   sx={{
                     borderRadius: "10px",
@@ -98,10 +101,19 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
                   key={index}
                 >
                   {columns.map((column, colIndex) => {
+                    console.log(item.prices[0].value, "prices[0].value");
                     if (column.field != "actions") {
                       return (
                         <TableCell key={colIndex} sx={{ p: 0, pl: 2 }}>
                           {item[column.field]}
+                        </TableCell>
+                      );
+                    }
+                    if (column.field == "prices[0].value") {
+                      console.log(item, "item en for de columna");
+                      return (
+                        <TableCell key={colIndex} sx={{ p: 0, pl: 2 }}>
+                          {item[column.field[0].value]}
                         </TableCell>
                       );
                     }
