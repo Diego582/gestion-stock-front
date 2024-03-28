@@ -50,7 +50,7 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
       headerName: "Agrupamiento",
     },
     {
-      field: "prices[0]",
+      field: "prices",
       headerName: "Precio",
     },
     { field: "actions", headerName: "Acciones" },
@@ -72,7 +72,7 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
     dispatch(read_products());
   }, []);
   console.log(data, "data product");
- 
+
   return (
     <>
       {data && data.length > 0 ? (
@@ -90,48 +90,52 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((item, index) => (
-                 
-                <TableRow
-                  sx={{
-                    borderRadius: "10px",
-                    backgroundColor:
-                      index % 2 === 0 ? "rgba(157, 85, 82, 0.3)" : "white",
-                  }}
-                  key={index}
-                >
-                  {columns.map((column, colIndex) => {
-                    console.log(item.prices[0].value, "prices[0].value");
-                    if (column.field != "actions") {
-                      return (
-                        <TableCell key={colIndex} sx={{ p: 0, pl: 2 }}>
-                          {item[column.field]}
-                        </TableCell>
-                      );
-                    }
-                    if (column.field == "prices[0].value") {
-                      console.log(item, "item en for de columna");
-                      return (
-                        <TableCell key={colIndex} sx={{ p: 0, pl: 2 }}>
-                          {item[column.field[0].value]}
-                        </TableCell>
-                      );
-                    }
-                  })}
-                  <TableCell>
-                    <Box>
-                      <IconButton onClick={() => handleSelected(item, "Edit")}>
-                        <EditIcon color="info" />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => handleSelected(item, "Delete")}
-                      >
-                        <DeleteIcon color="error" />
-                      </IconButton>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {data.map((item, index) => {
+                console.log(item, "item en data");
+                return (
+                  <TableRow
+                    sx={{
+                      borderRadius: "10px",
+                      backgroundColor:
+                        index % 2 === 0 ? "rgba(157, 85, 82, 0.3)" : "white",
+                    }}
+                    key={index}
+                  >
+                    {columns.map((column, colIndex) => {
+                      if (column.field == "prices") {
+                        return (
+                          <TableCell key={colIndex} sx={{ p: 0, pl: 2 }}>
+                            {"$ "}
+                            {item.prices[0].value &&
+                              item.prices[0].value.toFixed(2)}
+                          </TableCell>
+                        );
+                      }
+                      if (column.field != "actions") {
+                        return (
+                          <TableCell key={colIndex} sx={{ p: 0, pl: 2 }}>
+                            {item[column.field]}
+                          </TableCell>
+                        );
+                      }
+                    })}
+                    <TableCell>
+                      <Box>
+                        <IconButton
+                          onClick={() => handleSelected(item, "Edit")}
+                        >
+                          <EditIcon color="info" />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleSelected(item, "Delete")}
+                        >
+                          <DeleteIcon color="error" />
+                        </IconButton>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>

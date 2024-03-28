@@ -17,7 +17,6 @@ export default function NavBar() {
   const navigate = useNavigate();
   const user = useSelector((store) => store.users.user);
 
-
   const handleLogout = () => {
     dispatch(signout());
     navigate("/");
@@ -34,7 +33,7 @@ export default function NavBar() {
             <img src="./logo.png" style={{ width: "100px" }} />
           </Box>
 
-          {user ? (
+          {user && user.name ? (
             <Box sx={{ display: { xs: "none", sm: "flex" } }}>
               <Tooltip title={user.name}>
                 <IconButton sx={{ color: "white" }} onClick={handleLogout}>

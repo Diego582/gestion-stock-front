@@ -22,7 +22,7 @@ import Swal from "sweetalert2";
 const { read_product, read_products, create_product } = product_actions;
 const { read_groupings } = grouping_actions;
 const { read_products_base, create_product_base } = productBase_actions;
-const { create_price } = price_actions;
+const { create_price, destroy_price } = price_actions;
 
 export default function CreateProduct({ openCreate, setOpenCreate }) {
   const dispatch = useDispatch();
@@ -81,7 +81,7 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
         productPost.prices = res.payload.price;
         dispatch(create_product(productPost))
           .then((res) => {
-            if (res.payload) {
+            if (res.payload.product) {
               Swal.fire({
                 position: "top-end",
                 icon: "success",
@@ -92,6 +92,7 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
               /* codigoBarras.focus(); */
               setCodigoBarras({ codigoBarras: "" });
             } else if (res.payload.messages.length > 0) {
+              dispatch(destroy_price(productPost.prices));
               Swal.fire({
                 title: "Something went wrong!",
                 icon: "error",
