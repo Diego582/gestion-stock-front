@@ -32,7 +32,7 @@ export default function NavSales() {
       }}
     >
       {categories.map((text, index) => (
-        <Box key={index} disablePadding>
+        <Box key={index} >
           <Link to={text.toLowerCase()} style={{ textDecoration: "none" }}>
             <Box>
               <Tooltip title={text}>

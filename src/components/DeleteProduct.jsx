@@ -8,9 +8,11 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import product_actions from "../store/actions/products";
-import productBase_actions from "../store/actions/productBase";
+import prices_actions from "../store/actions/prices";
+
 import Swal from "sweetalert2";
 const { destroy_product } = product_actions;
+const { destroy_price } = prices_actions;
 
 export default function DeleteProduct({
   openDelete,
@@ -24,9 +26,14 @@ export default function DeleteProduct({
     setOpenDelete(!openDelete);
   };
   const handleDelete = () => {
+    {
+      product.prices.map((item) => {
+        dispatch(destroy_price(item));
+      });
+    }
+
     dispatch(destroy_product(product))
       .then((res) => {
-        
         if (res.payload.product) {
           Swal.fire({
             position: "top-end",
