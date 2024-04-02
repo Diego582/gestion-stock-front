@@ -71,7 +71,6 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
   useEffect(() => {
     dispatch(read_products());
   }, []);
-  console.log(data, "data product");
 
   return (
     <>
@@ -91,7 +90,6 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
             </TableHead>
             <TableBody>
               {data.map((item, index) => {
-                console.log(item, "item en data");
                 return (
                   <TableRow
                     sx={{

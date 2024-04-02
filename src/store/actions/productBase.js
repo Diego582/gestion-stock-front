@@ -9,7 +9,7 @@ const read_products_base = createAsyncThunk(
     //callback que realiza la petición
     try {
       let data = await axios(
-        apiUrl + "productsbase?codigoBarras=" + obj.codigoBarras
+        apiUrl + "productsbase?codigoBarras=" + obj
       );
 
       return {
