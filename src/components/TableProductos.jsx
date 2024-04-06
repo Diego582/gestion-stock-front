@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import CreateProduct from "./CreateProduct";
 import product_actions from "../store/actions/products";
 import DeleteProduct from "./DeleteProduct";
+import EditProduct from "./EditProduct";
 
 const { read_products } = product_actions;
 
@@ -31,6 +32,7 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
   const [product, setProduct] = useState("");
   const [codigoBarras, setCodigoBarras] = useState({});
   const [openDelete, setOpenDelete] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
 
   const columns = [
     {
@@ -62,7 +64,9 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
     option === "Edit" ? handleOpenCloseEdit() : handleOpenCloseDelete();
   };
 
-  const handleOpenCloseEdit = (product) => {};
+  const handleOpenCloseEdit = () => {
+    setOpenEdit(!openEdit);
+  };
 
   const handleOpenCloseDelete = () => {
     setOpenDelete(!openDelete);
@@ -145,6 +149,13 @@ export default function TableProductos({ openCreate, setOpenCreate }) {
       <DeleteProduct
         openDelete={openDelete}
         setOpenDelete={setOpenDelete}
+        product={product}
+        setProduct={setProduct}
+      />
+
+      <EditProduct
+        openEdit={openEdit}
+        setOpenEdit={setOpenEdit}
         product={product}
         setProduct={setProduct}
       />

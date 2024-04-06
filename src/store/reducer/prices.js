@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import price_actions from "../actions/prices";
 
-const { read_prices, read_price, create_price, destroy_price } =
+const { read_prices, read_price, create_price, destroy_price, update_price } =
   price_actions;
 
 const initial_state = {
@@ -29,6 +29,17 @@ const price_reducer = createReducer(initial_state, (build) =>
       return new_state;
     })
     .addCase(create_price.fulfilled, (state, action) => {
+      let new_state = {
+        ...state,
+        price: action.payload.price,
+        prices: action.payload.price
+          ? [...state.prices, action.payload.price]
+          : [...state.prices],
+        messages: action.payload.messages,
+      };
+      return new_state;
+    })
+    .addCase(update_price.fulfilled, (state, action) => {
       let new_state = {
         ...state,
         price: action.payload.price,
