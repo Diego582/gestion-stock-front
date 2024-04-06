@@ -43,7 +43,7 @@ const create_price = createAsyncThunk(
   async (obj) => {
     //callback que realiza la petición
     try {
-
+    
       let data = await axios.post(apiUrl + "prices", obj);
       return {
         price: data.data.response,
@@ -57,6 +57,28 @@ const create_price = createAsyncThunk(
     }
   }
 );
+
+const update_price = createAsyncThunk(
+  "update_price", //nombre de la accion
+  async (obj) => {
+    //callback que realiza la petición
+    try {
+
+      let data = await axios.put(apiUrl + "prices/" + obj._id, obj.data);
+      return {
+        price: data.data.response,
+        messages: [],
+      };
+    } catch (error) {
+      return {
+        price: false,
+        messages: error.response.data.messages || [error.response.data.message],
+      };
+    }
+  }
+);
+
+
 
 const destroy_price = createAsyncThunk(
   "destroy_price", //nombre de la accion
@@ -83,5 +105,6 @@ const price_actions = {
   read_price,
   create_price,
   destroy_price,
+  update_price
 };
 export default price_actions;
