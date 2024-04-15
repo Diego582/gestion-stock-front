@@ -9,15 +9,13 @@ import Customer from "./pages/Customer";
 import Reports from "./pages/Reports";
 import Products from "./pages/Products";
 import Private from "./utils/Private";
+import Check from "./pages/Check";
+import Invoice from "./pages/Invoice";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <Private>
-        <MainLayout />
-      </Private>
-    ),
+    element: <MainLayout />,
     children: [
       {
         path: "/",
@@ -26,6 +24,14 @@ const router = createBrowserRouter([
       {
         path: "/ventas",
         element: <Sales />,
+      },
+      {
+        path: "/facturaciones",
+        element: <Invoice />,
+      },
+      {
+        path: "/remitos",
+        element: <Check />,
       },
       {
         path: "/compras",
