@@ -22,6 +22,7 @@ import CreateProduct from "./CreateProduct";
 import product_actions from "../store/actions/products";
 import DeleteProduct from "./DeleteProduct";
 import EditProduct from "./EditProduct";
+import CrudSales from "./CrudSales";
 
 const { read_products } = product_actions;
 
@@ -35,54 +36,9 @@ export default function TableSales({
   const dispatch = useDispatch();
   /*  const data = useSelector((store) => store.products.products); */
   const [product, setProduct] = useState("");
-  const [codigoBarras, setCodigoBarras] = useState({});
   const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
-
-  const data = [
-    {
-      codigoBarras: 1111111111,
-      descripcion: "esto es producto 1",
-      amount: 3,
-      prices: [{ value: 100 }],
-    },
-    {
-      codigoBarras: 22222222222,
-      descripcion: "esto es producto 2",
-      amount: 1,
-      prices: [{ value: 250 }],
-    },
-    {
-      codigoBarras: 33333333333,
-      descripcion: "esto es producto 3",
-      amount: 1,
-      prices: [{ value: 340 }],
-    },
-    {
-      codigoBarras: 44444444444,
-      descripcion: "esto es producto 1",
-      amount: 1,
-      prices: [{ value: 450 }],
-    },
-    {
-      codigoBarras: 22222222222,
-      descripcion: "esto es producto 2",
-      amount: 1,
-      prices: [{ value: 250 }],
-    },
-    {
-      codigoBarras: 33333333333,
-      descripcion: "esto es producto 3",
-      amount: 1,
-      prices: [{ value: 340 }],
-    },
-    {
-      codigoBarras: 44444444444,
-      descripcion: "esto es producto 1",
-      amount: 1,
-      prices: [{ value: 450 }],
-    },
-  ];
+  const data = useSelector((store) => store.comprobantesCheck.compsChecks);
 
   const columns = [
     {
@@ -94,7 +50,7 @@ export default function TableSales({
       headerName: "Descripcion",
     },
     {
-      field: "prices",
+      field: "price",
       headerName: "Precio",
     },
     {
@@ -108,7 +64,6 @@ export default function TableSales({
     { field: "actions", headerName: "Acciones" },
   ];
 
-  const [producto, setProducto] = useState({});
   const handleSelected = (product, option) => {
     setProduct(product);
     option === "Edit" ? handleOpenCloseEdit() : handleOpenCloseDelete();
@@ -121,15 +76,19 @@ export default function TableSales({
   const handleOpenCloseDelete = () => {
     setOpenDelete(!openDelete);
   };
-
   setTotal(data.reduce((a, b) => a + b.amount * b.prices[0].value, 0));
+
   console.log(total, "esto es total");
   useEffect(() => {
     /* dispatch(read_products()); */
   }, []);
+  console.log(data, " data en table sales ");
 
   return (
     <>
+      <CrudSales  />
+      <Divider />
+
       {data && data.length > 0 ? (
         <TableContainer sx={{ maxHeight: "70vh" }}>
           <Table stickyHeader>
@@ -156,12 +115,11 @@ export default function TableSales({
                     key={index}
                   >
                     {columns.map((column, colIndex) => {
-                      if (column.field == "prices") {
+                      if (column.field == "price") {
                         return (
                           <TableCell key={colIndex} sx={{ p: 0, pl: 2 }}>
                             {"$ "}
-                            {item.prices[0].value &&
-                              item.prices[0].value.toFixed(2)}
+                            {item.price.value && item.price.value.toFixed(2)}
                           </TableCell>
                         );
                       }
@@ -205,21 +163,6 @@ export default function TableSales({
       ) : (
         <Typography>No hay datos que mostrar</Typography>
       )}
-
-      <CreateProduct openCreate={openCreate} setOpenCreate={setOpenCreate} />
-      <DeleteProduct
-        openDelete={openDelete}
-        setOpenDelete={setOpenDelete}
-        product={product}
-        setProduct={setProduct}
-      />
-
-      <EditProduct
-        openEdit={openEdit}
-        setOpenEdit={setOpenEdit}
-        product={product}
-        setProduct={setProduct}
-      />
     </>
   );
 }

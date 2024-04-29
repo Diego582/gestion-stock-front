@@ -301,6 +301,7 @@ const Customer = () => {
                     validators={["required"]}
                     errorMessages={["Este campo es requerido"]}
                     onChange={handleChange}
+                    inputProps={{ maxLength: 11 }}
                   />
                 </Box>
               </Box>

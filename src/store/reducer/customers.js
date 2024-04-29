@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import customer_actions from "../actions/customers";
 
-const { read_customers, create_customer, destroy_customer } = customer_actions;
+const { read_customers, create_customer, destroy_customer, read_customer } = customer_actions;
 
 const initial_state = {
   customer: {},
@@ -39,6 +39,14 @@ const customer_reducer = createReducer(initial_state, (build) =>
             (item) => item._id !== action.payload.customer
           ),
         ],
+        messages: action.payload.messages,
+      };
+      return new_state;
+    })
+    .addCase(read_customer.fulfilled, (state, action) => {
+      let new_state = {
+        ...state,
+        customer: action.payload.customer,
         messages: action.payload.messages,
       };
       return new_state;

@@ -38,6 +38,25 @@ const read_check = createAsyncThunk("read_check", async (obj) => {
   }
 });
 
+const read_last_check = createAsyncThunk("read_last_check", async (obj) => {
+  //callback que realiza la petición
+  try {
+
+    let data = await axios(
+      apiUrl + "checks/last"
+    );
+
+    return {
+      checkLast: data.data.response,
+    };
+  } catch (error) {
+    return {
+      check: {},
+    };
+  }
+});
+
+
 const create_check = createAsyncThunk(
   "create_check", //nombre de la accion
   async (obj) => {
@@ -104,6 +123,7 @@ const check_actions = {
   read_check,
   create_check,
   destroy_check,
-  update_check
+  update_check,
+  read_last_check
 };
 export default check_actions;

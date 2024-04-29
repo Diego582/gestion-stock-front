@@ -1,10 +1,11 @@
 import { createReducer } from "@reduxjs/toolkit";
 import check_actions from "../actions/check";
 
-const { read_checks, create_check, destroy_check } = check_actions;
+const { read_checks, create_check, destroy_check, read_last_check } = check_actions;
 
 const initial_state = {
     check: {},
+    checkLast: {},
     checks: [],
     messages: [],
 };
@@ -19,6 +20,15 @@ const check_reducer = createReducer(initial_state, (build) =>
             };
             return new_state;
         })
+        .addCase(read_last_check.fulfilled, (state, action) => {
+            let new_state = {
+                ...state,
+                checkLast: action.payload.checkLast,
+                messages: action.payload.messages,
+            };
+            return new_state;
+        })
+
         .addCase(create_check.fulfilled, (state, action) => {
             let new_state = {
                 ...state,

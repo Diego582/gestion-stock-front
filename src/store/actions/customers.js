@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import apiUrl from "../../utils/apiUrl";
 
+
 const read_customers = createAsyncThunk("read_customers", async (obj) => {
   //callback que realiza la petición
   try {
@@ -16,6 +17,22 @@ const read_customers = createAsyncThunk("read_customers", async (obj) => {
     };
   }
 });
+
+const read_customer = createAsyncThunk("read_customer", async (obj) => {
+  //callback que realiza la petición
+  try {
+    let data = await axios(apiUrl + "customers/" + obj._id);
+
+    return {
+      customer: data.data.response,
+    };
+  } catch (error) {
+    return {
+      customer: {},
+    };
+  }
+});
+
 
 const create_customer = createAsyncThunk(
   "create_customer", //nombre de la accion
@@ -56,5 +73,5 @@ const destroy_customer = createAsyncThunk(
   }
 );
 
-const customer_actions = { read_customers, create_customer, destroy_customer };
+const customer_actions = { read_customers, create_customer, destroy_customer, read_customer };
 export default customer_actions;
