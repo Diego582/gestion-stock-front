@@ -79,15 +79,12 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
       value: price > 0 ? price : 0,
       currency: "Pesos",
     };
-  
 
     dispatch(create_price(priceItem))
       .then((res) => {
         productPost.prices = res.payload.price;
         dispatch(create_product(productPost))
           .then((res) => {
-           
-
             if (res.payload.product) {
               Swal.fire({
                 position: "top-end",
@@ -122,7 +119,7 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
       categoria: categoria,
       agrupamiento: agrupamiento,
     };
-   
+
     dispatch(create_product_base(productPostNew))
       .then((res) => {
         if (res.payload.productBase.descripcion) {
@@ -149,7 +146,6 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
     dispatch(read_groupings());
     dispatch(read_products_base(barcode))
       .then((res) => {
-       
         if (res.payload.productBase) {
           setCategoria(res.payload.productBase.categoria);
           setDescripcion(res.payload.productBase.descripcion);
@@ -161,8 +157,7 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
       .catch((e) => {});
   }, [barcode]);
 
- 
-
+  console.log(openCreate, "openCreate");
   return (
     <>
       <Modal
