@@ -23,6 +23,9 @@ import product_actions from "../store/actions/products";
 import DeleteProduct from "./DeleteProduct";
 import EditProduct from "./EditProduct";
 import CrudSales from "./CrudSales";
+import comprobante_check_actions from "../store/actions/comprobanteCheck";
+
+const { destroy_comprobante_check } = comprobante_check_actions;
 
 const { read_products } = product_actions;
 
@@ -39,6 +42,10 @@ export default function TableSales({
   const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const data = useSelector((store) => store.comprobantesCheck.compsChecks);
+
+  const handleDelete = (item) => {
+    dispatch(destroy_comprobante_check(item));
+  };
 
   const columns = [
     {
@@ -76,8 +83,10 @@ export default function TableSales({
   const handleOpenCloseDelete = () => {
     setOpenDelete(!openDelete);
   };
-  setTotal(data.reduce((a, b) => a + b.amount * b.prices[0].value, 0));
-
+  if (data) {
+    console.log("ingeso a set Total", data);
+    setTotal(data.reduce((a, b) => a + b.amount * b.price, 0));
+  }
   console.log(total, "esto es total");
   useEffect(() => {
     /* dispatch(read_products()); */
@@ -86,7 +95,7 @@ export default function TableSales({
 
   return (
     <>
-      <CrudSales  />
+      <CrudSales />
       <Divider />
 
       {data && data.length > 0 ? (
@@ -105,6 +114,7 @@ export default function TableSales({
             </TableHead>
             <TableBody>
               {data.map((item, index) => {
+                console.log(item, "esto es item en la tabla por producto");
                 return (
                   <TableRow
                     sx={{
@@ -119,7 +129,7 @@ export default function TableSales({
                         return (
                           <TableCell key={colIndex} sx={{ p: 0, pl: 2 }}>
                             {"$ "}
-                            {item.price.value && item.price.value.toFixed(2)}
+                            {item.price && item.price.toFixed(2)}
                           </TableCell>
                         );
                       }
@@ -127,8 +137,8 @@ export default function TableSales({
                         return (
                           <TableCell key={colIndex} sx={{ p: 0, pl: 2 }}>
                             {"$ "}
-                            {item.prices[0].value &&
-                              (item.prices[0].value * item.amount).toFixed(2)}
+                            {item.price &&
+                              (item.price * item.amount).toFixed(2)}
                           </TableCell>
                         );
                       }
@@ -147,9 +157,7 @@ export default function TableSales({
                         >
                           <EditIcon color="info" />
                         </IconButton>
-                        <IconButton
-                          onClick={() => handleSelected(item, "Delete")}
-                        >
+                        <IconButton onClick={() => handleDelete(index)}>
                           <DeleteIcon color="error" />
                         </IconButton>
                       </Box>

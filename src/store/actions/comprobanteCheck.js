@@ -29,9 +29,8 @@ const destroy_comprobante_check = createAsyncThunk(
         //callback que realiza la petición
         try {
 
-
             return {
-                check: data.data.response,
+                check: obj,
                 messages: [],
             };
         } catch (error) {
@@ -43,7 +42,27 @@ const destroy_comprobante_check = createAsyncThunk(
     }
 );
 
+const destroy_comprobantes_check = createAsyncThunk(
+    "destroy_comprobantes_check", //nombre de la accion
+    async () => {
+        //callback que realiza la petición
+        try {
+
+            return {
+                checks:[] ,
+                messages: [],
+            };
+        } catch (error) {
+            return {
+                customer: {},
+                messages: error.response.data.messages || [error.response.data.message],
+            };
+        }
+    }
+);
+
+
 const comprobante_check_actions = {
-    add_comprobante_check, destroy_comprobante_check
+    add_comprobante_check, destroy_comprobante_check, destroy_comprobantes_check
 };
 export default comprobante_check_actions;
