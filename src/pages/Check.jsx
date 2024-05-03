@@ -8,7 +8,9 @@ import SaveIcon from "@mui/icons-material/Save";
 import check_actions from "../store/actions/check";
 import { useDispatch, useSelector } from "react-redux";
 import SelectCustomer from "../components/SelectCustomer";
+import comprobante_check_actions from "../store/actions/comprobanteCheck";
 
+const { destroy_comprobantes_check } = comprobante_check_actions;
 const { read_checks, read_last_check } = check_actions;
 
 const Check = () => {
@@ -21,12 +23,28 @@ const Check = () => {
   const [comprobante] = useState(0);
 
   const checks = useSelector((store) => store.checks.check);
-
+  const comprobantes = useSelector(
+    (store) => store.comprobantesCheck.compsChecks
+  );
   const checkLast = useSelector((store) => store.checks.checkLast);
+  const customer = useSelector((store) => store.customers.customer);
 
   console.log(currentDate, "currentdate");
   console.log(checks, "storeCheck");
   console.log(checkLast, "checkLast");
+
+  const handlePost = () => {
+    let itemPost = {
+      puntoSales: 1,
+      comprobante: comprobante == 0 ? 1 : comprobante,
+      fecha: currentDate,
+      products_id: comprobantes,
+      client_id: customer,
+    };
+
+    console.log(itemPost, "item que se carga");
+    dispatch(destroy_comprobantes_check());
+  };
 
   useEffect(() => {
     dispatch(read_checks());
@@ -54,22 +72,37 @@ const Check = () => {
           mb: 1,
         }}
       >
-        <Typography variant="h5">Ticket N°: 1-{comprobante}</Typography>
+        <Typography variant="h5">
+          Ticket N°: 1-
+          {comprobante && comprobante.comprobante
+            ? comprobante.comprobante + 1
+            : 1}
+        </Typography>
         <Typography variant="h5">
           Fecha: {currentDate.getDate()}/{currentDate.getMonth() + 1}/
           {currentDate.getFullYear()}
         </Typography>
         <Typography variant="h5">Monto: $ {total.toFixed(2)}</Typography>
         <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-          <IconButton>
-            <AddBoxIcon fontSize="large" />
-          </IconButton>
-          <IconButton>
-            <LocalPrintshopIcon fontSize="large" />
-          </IconButton>
-          <IconButton>
-            <SaveIcon fontSize="large" />
-          </IconButton>
+          {comprobantes && comprobantes.length > 0 ? (
+            <>
+              <IconButton>
+                <LocalPrintshopIcon fontSize="large" />
+              </IconButton>
+              <IconButton onClick={handlePost}>
+                <SaveIcon fontSize="large" />
+              </IconButton>
+            </>
+          ) : (
+            <>
+              <IconButton disabled>
+                <LocalPrintshopIcon fontSize="large" />
+              </IconButton>
+              <IconButton disabled>
+                <SaveIcon fontSize="large" />
+              </IconButton>
+            </>
+          )}
         </Box>
       </Box>
       <Divider />
