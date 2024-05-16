@@ -84,14 +84,13 @@ export default function TableSales({
     setOpenDelete(!openDelete);
   };
   if (data) {
-    console.log("ingeso a set Total", data);
     setTotal(data.reduce((a, b) => a + b.amount * b.price, 0));
   }
-  console.log(total, "esto es total");
+
+
   useEffect(() => {
     /* dispatch(read_products()); */
   }, []);
-  console.log(data, " data en table sales ");
 
   return (
     <>
@@ -152,11 +151,7 @@ export default function TableSales({
                     })}
                     <TableCell>
                       <Box>
-                        <IconButton
-                          onClick={() => handleSelected(item, "Edit")}
-                        >
-                          <EditIcon color="info" />
-                        </IconButton>
+
                         <IconButton onClick={() => handleDelete(index)}>
                           <DeleteIcon color="error" />
                         </IconButton>
