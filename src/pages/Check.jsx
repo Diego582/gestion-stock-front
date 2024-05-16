@@ -34,7 +34,7 @@ const Check = () => {
   const customer = useSelector((store) => store.customers.customer);
 
   const handlePostItem = () => {
-    comprobantes.map((item) => {
+    /*   comprobantes.map((item) => {
       dispatch(create_product_sale(item))
         .then((res) => {
           setIdComprobantes((prevArray) => [
@@ -44,7 +44,6 @@ const Check = () => {
         })
         .catch((err) => {});
     });
-/* 
     Swal.fire({
       title: "Confirma venta por Ticket?",
       showDenyButton: true,
@@ -62,7 +61,6 @@ const Check = () => {
     }); */
   };
 
-
   const handlePost = () => {
     let itemPost = {
       puntoSales: 1,
@@ -75,19 +73,6 @@ const Check = () => {
     console.log(itemPost, "item que se carga");
     dispatch(destroy_comprobantes_check());
     setIdComprobantes([]);
-  };
-
-  const handlePost = () => {
-    let itemPost = {
-      puntoSales: 1,
-      comprobante: comprobante == 0 ? 1 : comprobante,
-      fecha: currentDate,
-      products_id: comprobantes,
-      client_id: customer,
-    };
-
-    console.log(itemPost, "item que se carga");
-    dispatch(destroy_comprobantes_check());
   };
 
   useEffect(() => {
@@ -135,7 +120,6 @@ const Check = () => {
               </IconButton>
 
               <IconButton onClick={handlePostItem}>
-
                 <SaveIcon fontSize="large" />
               </IconButton>
             </>
