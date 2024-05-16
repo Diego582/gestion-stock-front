@@ -19,7 +19,7 @@ export default function CrudSales() {
       amount: amount,
       price: parseInt(price),
     };
-    console.log(item, "se cargo item");
+   
     dispatch(add_comprobante_check(item));
     setCodigoBarras("");
   };
@@ -29,11 +29,11 @@ export default function CrudSales() {
   const handleEnterKey = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      console.log("hiciste enter");
+    
 
       dispatch(read_products({ codigoBarras: codigoBarras }))
         .then((res) => {
-          console.log(res.payload.products[0], "payload en handlekey");
+        
           if (res.payload.products) {
             const { descripcion, prices } = res.payload.products[0];
 
@@ -44,7 +44,7 @@ export default function CrudSales() {
     }
   };
 
-  console.log(addComprobante, "add comprobante");
+
   return (
     <Box sx={{ display: "flex" }}>
       <TextField

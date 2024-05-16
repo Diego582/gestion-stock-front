@@ -9,13 +9,14 @@ const add_comprobante_check = createAsyncThunk(
         //callback que realiza la petición
         try {
             console.log(obj, 'obj en comprante check')
+            let data = await axios.post(apiUrl + "productssales", obj);
             return {
-                compCheck: obj,
+                compCheck: data.data.response,
                 messages: [],
             };
         } catch (error) {
             return {
-                compCheck: false,
+                compCheck: {},
                 messages: error.response.data.messages || [error.response.data.message],
             };
         }
