@@ -62,6 +62,7 @@ const Check = () => {
     }); */
   };
 
+
   const handlePost = () => {
     let itemPost = {
       puntoSales: 1,
@@ -74,6 +75,19 @@ const Check = () => {
     console.log(itemPost, "item que se carga");
     dispatch(destroy_comprobantes_check());
     setIdComprobantes([]);
+  };
+
+  const handlePost = () => {
+    let itemPost = {
+      puntoSales: 1,
+      comprobante: comprobante == 0 ? 1 : comprobante,
+      fecha: currentDate,
+      products_id: comprobantes,
+      client_id: customer,
+    };
+
+    console.log(itemPost, "item que se carga");
+    dispatch(destroy_comprobantes_check());
   };
 
   useEffect(() => {
@@ -119,7 +133,9 @@ const Check = () => {
               <IconButton>
                 <LocalPrintshopIcon fontSize="large" />
               </IconButton>
+
               <IconButton onClick={handlePostItem}>
+
                 <SaveIcon fontSize="large" />
               </IconButton>
             </>

@@ -87,6 +87,7 @@ export default function TableSales({
     setTotal(data.reduce((a, b) => a + b.amount * b.price, 0));
   }
 
+
   useEffect(() => {
     /* dispatch(read_products()); */
   }, []);
@@ -112,6 +113,7 @@ export default function TableSales({
             </TableHead>
             <TableBody>
               {data.map((item, index) => {
+                console.log(item, "esto es item en la tabla por producto");
                 return (
                   <TableRow
                     sx={{
@@ -149,6 +151,7 @@ export default function TableSales({
                     })}
                     <TableCell>
                       <Box>
+
                         <IconButton onClick={() => handleDelete(index)}>
                           <DeleteIcon color="error" />
                         </IconButton>
