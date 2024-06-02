@@ -12,8 +12,8 @@ import comprobante_check_actions from "../store/actions/comprobanteCheck";
 import product_sale_actions from "../store/actions/productSale";
 import Swal from "sweetalert2";
 
-const { destroy_comprobantes_check } = comprobante_check_actions;
-const { read_checks, read_last_check } = check_actions;
+const { destroy_comprobante_check } = comprobante_check_actions;
+const { read_checks, read_last_check, create_check } = check_actions;
 const { create_product_sale } = product_sale_actions;
 
 const Check = () => {
@@ -33,6 +33,7 @@ const Check = () => {
   const checkLast = useSelector((store) => store.checks.checkLast);
   const customer = useSelector((store) => store.customers.customer);
 
+  console.log(checkLast, "checkLast");
   const handlePostItem = () => {
     /*   comprobantes.map((item) => {
       dispatch(create_product_sale(item))
@@ -66,14 +67,26 @@ const Check = () => {
       puntoSales: 1,
       comprobante: comprobante == 0 ? 1 : comprobante,
       fecha: currentDate,
-      products_id: idComprobantes,
+      products_id: comprobantes.map((item) => item._id),
       client_id: customer._id,
     };
 
-    console.log(itemPost, "item que se carga");
-    dispatch(destroy_comprobantes_check());
-    setIdComprobantes([]);
+    Swal.fire({
+      title: "Confirma venta por Ticket?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Si",
+      denyButtonText: `No`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(create_check(itemPost));
+        Swal.fire("Saved!", "", "success");
+      } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
+      }
+    });
   };
+  console.log(idComprobantes, "idcomprobantes que se cargaron");
 
   useEffect(() => {
     dispatch(read_checks());
@@ -119,7 +132,7 @@ const Check = () => {
                 <LocalPrintshopIcon fontSize="large" />
               </IconButton>
 
-              <IconButton onClick={handlePostItem}>
+              <IconButton onClick={handlePost}>
                 <SaveIcon fontSize="large" />
               </IconButton>
             </>

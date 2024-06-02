@@ -29,9 +29,12 @@ const destroy_comprobante_check = createAsyncThunk(
     async (obj) => {
         //callback que realiza la petición
         try {
+            console.log(obj, 'esto es obj que llego a delete')
+            let data = await axios.delete(apiUrl + "productssales/" + obj._id);
+
 
             return {
-                check: obj,
+                compCheck: data.data.response,
                 messages: [],
             };
         } catch (error) {
@@ -44,13 +47,13 @@ const destroy_comprobante_check = createAsyncThunk(
 );
 
 const destroy_comprobantes_check = createAsyncThunk(
-    "destroy_comprobantes_check", //nombre de la accion
+    "destroy_comprobante_check", //nombre de la accion
     async () => {
         //callback que realiza la petición
         try {
 
             return {
-                checks:[] ,
+                checks: [],
                 messages: [],
             };
         } catch (error) {
@@ -64,6 +67,6 @@ const destroy_comprobantes_check = createAsyncThunk(
 
 
 const comprobante_check_actions = {
-    add_comprobante_check, destroy_comprobante_check, destroy_comprobantes_check
+    add_comprobante_check, destroy_comprobante_check, destroy_comprobante_check
 };
 export default comprobante_check_actions;

@@ -5,13 +5,13 @@ import product_actions from "../store/actions/products";
 import comprobante_check_actions from "../store/actions/comprobanteCheck";
 
 const { read_products } = product_actions;
-const { add_comprobante_check} = comprobante_check_actions;
+const { add_comprobante_check } = comprobante_check_actions;
 export default function CrudSales() {
   const [codigoBarras, setCodigoBarras] = useState("");
   const [amount, setAmount] = useState(1);
   const dispatch = useDispatch();
   const addComprobante = useSelector((store) => store.comprobantesCheck);
-  
+
   const handleChange = (descripcion, price) => {
     const item = {
       codigoBarras: codigoBarras,
@@ -19,21 +19,17 @@ export default function CrudSales() {
       amount: amount,
       price: parseInt(price),
     };
-   
-    dispatch(add_comprobante_check(item));
+
+    dispatch(add_comprobante_check(item))
     setCodigoBarras("");
   };
-
-
 
   const handleEnterKey = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-    
 
       dispatch(read_products({ codigoBarras: codigoBarras }))
         .then((res) => {
-        
           if (res.payload.products) {
             const { descripcion, prices } = res.payload.products[0];
 
@@ -43,7 +39,6 @@ export default function CrudSales() {
         .catch((e) => {});
     }
   };
-
 
   return (
     <Box sx={{ display: "flex" }}>

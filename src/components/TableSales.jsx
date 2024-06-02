@@ -42,9 +42,13 @@ export default function TableSales({
   const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const data = useSelector((store) => store.comprobantesCheck.compsChecks);
-
+  console.log(data, "date de compCheck");
   const handleDelete = (item) => {
-    dispatch(destroy_comprobante_check(item));
+    dispatch(destroy_comprobante_check(item))
+      .then((res) => {
+        console.log(res, "res de destroy_comprobante_check ");
+      })
+      .catch((err) => {});
   };
 
   const columns = [
@@ -86,7 +90,6 @@ export default function TableSales({
   if (data) {
     setTotal(data.reduce((a, b) => a + b.amount * b.price, 0));
   }
-
 
   useEffect(() => {
     /* dispatch(read_products()); */
@@ -151,8 +154,7 @@ export default function TableSales({
                     })}
                     <TableCell>
                       <Box>
-
-                        <IconButton onClick={() => handleDelete(index)}>
+                        <IconButton onClick={() => handleDelete(item)}>
                           <DeleteIcon color="error" />
                         </IconButton>
                       </Box>
