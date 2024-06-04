@@ -65,7 +65,7 @@ const Check = () => {
   const handlePost = () => {
     let itemPost = {
       puntoSales: 1,
-      comprobante: comprobante == 0 ? 1 : comprobante,
+      comprobante: checkLast && checkLast.comprobante ? checkLast.comprobante + 1 : 1,
       fecha: currentDate,
       products_id: comprobantes.map((item) => item._id),
       client_id: customer._id,
@@ -116,9 +116,7 @@ const Check = () => {
       >
         <Typography variant="h5">
           Ticket N°: 1-
-          {comprobante && comprobante.comprobante
-            ? comprobante.comprobante + 1
-            : 1}
+          {checkLast && checkLast.comprobante ? checkLast.comprobante + 1 : 1}
         </Typography>
         <Typography variant="h5">
           Fecha: {currentDate.getDate()}/{currentDate.getMonth() + 1}/
