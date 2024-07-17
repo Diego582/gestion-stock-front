@@ -13,7 +13,8 @@ import product_sale_actions from "../store/actions/productSale";
 import Swal from "sweetalert2";
 
 const { destroy_comprobante_check } = comprobante_check_actions;
-const { read_checks, read_last_check, create_check } = check_actions;
+const { read_checks, read_last_check, create_check, restore_check } =
+  check_actions;
 const { create_product_sale } = product_sale_actions;
 
 const Check = () => {
@@ -65,7 +66,8 @@ const Check = () => {
   const handlePost = () => {
     let itemPost = {
       puntoSales: 1,
-      comprobante: checkLast && checkLast.comprobante ? checkLast.comprobante + 1 : 1,
+      comprobante:
+        checkLast && checkLast.comprobante ? checkLast.comprobante + 1 : 1,
       fecha: currentDate,
       products_id: comprobantes.map((item) => item._id),
       client_id: customer._id,
@@ -80,6 +82,7 @@ const Check = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         dispatch(create_check(itemPost));
+        dispatch(reset_check_store());
         Swal.fire("Saved!", "", "success");
       } else if (result.isDenied) {
         Swal.fire("Changes are not saved", "", "info");

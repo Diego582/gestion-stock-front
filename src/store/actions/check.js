@@ -118,12 +118,17 @@ const destroy_check = createAsyncThunk(
   }
 );
 
+const reset_check_store = createAsyncThunk("reset_check_store");
+
+
+
 const check_actions = {
   read_checks,
   read_check,
   create_check,
   destroy_check,
   update_check,
-  read_last_check
+  read_last_check,
+  reset_check_store
 };
 export default check_actions;
