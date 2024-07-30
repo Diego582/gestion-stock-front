@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import comprobante_check_actions from "../actions/comprobanteCheck";
 
-const { add_comprobante_check, destroy_comprobante_check } = comprobante_check_actions;
+const { add_comprobante_check, destroy_comprobante_check, reset_comprobanteCheck_store } = comprobante_check_actions;
 
 const initial_state = {
     compCheck: {},
@@ -35,6 +35,10 @@ const comprobante_check_reducer = createReducer(initial_state, (build) =>
                 messages: action.payload.messages,
             };
             return new_state;
+        })
+
+        .addCase(reset_comprobanteCheck_store, () => {
+            return initial_state;
         })
 );
 

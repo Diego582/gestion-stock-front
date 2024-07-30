@@ -1,9 +1,15 @@
-import { Box, Button, Divider, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import NavSales from "../components/NavSales";
 import { useEffect, useState } from "react";
 import TableSales from "../components/TableSales";
-import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
-import AddBoxIcon from "@mui/icons-material/AddBox";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import SaveIcon from "@mui/icons-material/Save";
 import check_actions from "../store/actions/check";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,15 +17,17 @@ import SelectCustomer from "../components/SelectCustomer";
 import comprobante_check_actions from "../store/actions/comprobanteCheck";
 import product_sale_actions from "../store/actions/productSale";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
-const { destroy_comprobante_check } = comprobante_check_actions;
-const { read_checks, read_last_check, create_check, restore_check } =
+const { destroy_comprobante_check, reset_comprobanteCheck_store } =
+  comprobante_check_actions;
+const { read_checks, read_last_check, create_check, reset_check_store } =
   check_actions;
 const { create_product_sale } = product_sale_actions;
 
 const Check = () => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const handleOpenCloseCreate = () => {};
 
   const [currentDate] = useState(new Date());
@@ -33,8 +41,6 @@ const Check = () => {
   );
   const checkLast = useSelector((store) => store.checks.checkLast);
   const customer = useSelector((store) => store.customers.customer);
-
-  console.log(checkLast, "checkLast");
   const handlePostItem = () => {
     /*   comprobantes.map((item) => {
       dispatch(create_product_sale(item))
@@ -76,20 +82,38 @@ const Check = () => {
     Swal.fire({
       title: "Confirma venta por Ticket?",
       showDenyButton: true,
-      showCancelButton: true,
       confirmButtonText: "Si",
       denyButtonText: `No`,
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(create_check(itemPost));
-        dispatch(reset_check_store());
-        Swal.fire("Saved!", "", "success");
+        let idPrint = "";
+        dispatch(create_check(itemPost)).then((res) => {
+          idPrint = res.payload.check;
+        });
+        dispatch(reset_comprobanteCheck_store());
+        dispatch(read_last_check());
+
+        Swal.fire({
+          title: "Imprime Ticket?",
+          confirmButtonText: "Si",
+          showDenyButton: true,
+          denyButtonText: `No`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate("/remitos/" + idPrint._id);
+            Swal.fire("se imrime el ticket", "", "info");
+          }
+        });
       } else if (result.isDenied) {
         Swal.fire("Changes are not saved", "", "info");
       }
     });
   };
-  console.log(idComprobantes, "idcomprobantes que se cargaron");
+
+  const handleRefresh = () => {
+    dispatch(reset_comprobanteCheck_store());
+    dispatch(read_last_check());
+  };
 
   useEffect(() => {
     dispatch(read_checks());
@@ -129,18 +153,21 @@ const Check = () => {
         <Box sx={{ display: "flex", justifyContent: "space-around" }}>
           {comprobantes && comprobantes.length > 0 ? (
             <>
-              <IconButton>
-                <LocalPrintshopIcon fontSize="large" />
-              </IconButton>
-
-              <IconButton onClick={handlePost}>
-                <SaveIcon fontSize="large" />
-              </IconButton>
+              <Tooltip title="Refrescar">
+                <IconButton onClick={handleRefresh}>
+                  <RefreshIcon fontSize="large" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Crear Imprimir">
+                <IconButton onClick={handlePost}>
+                  <SaveIcon fontSize="large" />
+                </IconButton>
+              </Tooltip>
             </>
           ) : (
             <>
               <IconButton disabled>
-                <LocalPrintshopIcon fontSize="large" />
+                <RefreshIcon fontSize="large" />
               </IconButton>
               <IconButton disabled>
                 <SaveIcon fontSize="large" />
