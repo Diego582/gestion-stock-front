@@ -1,11 +1,21 @@
-import { Box, MenuItem, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  MenuItem,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import customer_actions from "../store/actions/customers";
 import { useEffect, useState } from "react";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { useNavigate } from "react-router-dom";
 
 const { read_customers, read_customer } = customer_actions;
 
 export default function SelectCustomer() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [search, setSearch] = useState({ lastName: "" });
 
@@ -14,15 +24,16 @@ export default function SelectCustomer() {
   const customers = useSelector((store) => store.customers.customers);
 
   const handleSelect = (id) => {
-    console.log(id, "se ejecuto handleselect");
     dispatch(read_customer({ _id: id }));
   };
 
-  console.log(customers, "customers en select customer");
+  const handleCliente = () => {
+    navigate("/clientes");
+  };
+
   useEffect(() => {
     dispatch(read_customers(search));
   }, [search]);
-  console.log(customer, "customer");
 
   return (
     <Box
@@ -32,6 +43,8 @@ export default function SelectCustomer() {
         alignItems: "center",
         mt: 0.75,
         mb: 0.75,
+        pr: 10,
+        pl: 9,
       }}
     >
       <Typography
@@ -66,6 +79,11 @@ export default function SelectCustomer() {
         {customer && customer.name} {customer && customer.lastName} - DNI :{" "}
         {customer && customer.dni}
       </Typography>
+      <Tooltip title="Agregar Cliente">
+        <IconButton onClick={handleCliente}>
+          <AddCircleIcon fontSize="large" />
+        </IconButton>
+      </Tooltip>
     </Box>
   );
 }

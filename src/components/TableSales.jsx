@@ -42,12 +42,10 @@ export default function TableSales({
   const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const data = useSelector((store) => store.comprobantesCheck.compsChecks);
-  console.log(data, "date de compCheck");
+
   const handleDelete = (item) => {
     dispatch(destroy_comprobante_check(item))
-      .then((res) => {
-        console.log(res, "res de destroy_comprobante_check ");
-      })
+      .then((res) => {})
       .catch((err) => {});
   };
 
@@ -116,7 +114,6 @@ export default function TableSales({
             </TableHead>
             <TableBody>
               {data.map((item, index) => {
-                console.log(item, "esto es item en la tabla por producto");
                 return (
                   <TableRow
                     sx={{

@@ -157,7 +157,6 @@ export default function CreateProduct({ openCreate, setOpenCreate }) {
       .catch((e) => {});
   }, [barcode]);
 
-  console.log(openCreate, "openCreate");
   return (
     <>
       <Modal

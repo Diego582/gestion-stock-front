@@ -11,6 +11,7 @@ import Products from "./pages/Products";
 import Private from "./utils/Private";
 import Check from "./pages/Check";
 import Invoice from "./pages/Invoice";
+import PrintTicket from "./pages/PrintTicket";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
   {
     path: "/signin",
     element: <SignIn />,
+  },
+  {
+    path: "/remitos/:id",
+    element: <PrintTicket />,
   },
 ]);
 

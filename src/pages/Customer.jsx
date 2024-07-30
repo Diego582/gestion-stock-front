@@ -19,11 +19,14 @@ import { IMaskInput } from "react-imask";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import customer_actions from "../store/actions/customers";
 import Swal from "sweetalert2";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
+import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+
 const { read_customers, create_customer, destroy_customer } = customer_actions;
 
 const TextMaskCustom = forwardRef(function TextMaskCustom(props, ref) {
@@ -48,6 +51,7 @@ TextMaskCustom.propTypes = {
 };
 
 const Customer = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [openCreate, setOpenCreate] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -68,6 +72,10 @@ const Customer = () => {
       ...prevState,
       [name]: value,
     }));
+  };
+
+  const handleReturn = () => {
+    navigate("/remitos");
   };
 
   const handlePost = (cliente) => {
@@ -143,13 +151,18 @@ const Customer = () => {
         }}
       >
         <Typography variant="h4">Clientes</Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleOpenCloseCreate}
-        >
-          Nuevo Cliente
-        </Button>
+        <Box>
+          <Tooltip title="Nuevo Cliente">
+            <IconButton onClick={handleOpenCloseCreate}>
+              <AddCircleIcon fontSize="large" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Volver">
+            <IconButton onClick={handleReturn}>
+              <KeyboardReturnIcon fontSize="large" />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Box>
       <TextField
         id="filled-search"

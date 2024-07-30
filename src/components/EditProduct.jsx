@@ -37,7 +37,6 @@ export default function EditProduct({
     };
     dispatch(update_product(priceEdit))
       .then((res) => {
-        console.log(res, "res update product");
         if (res.payload.product.descripcion) {
           Swal.fire({
             position: "top-end",

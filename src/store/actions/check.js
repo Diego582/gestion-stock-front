@@ -1,4 +1,4 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import apiUrl from "../../utils/apiUrl";
 
@@ -8,7 +8,7 @@ const read_checks = createAsyncThunk("read_checks", async (obj) => {
   try {
 
     let data = await axios(apiUrl + "checks");
-    console.log(data, 'data en actions')
+
     return {
       checks: data.data.response,
     };
@@ -24,9 +24,12 @@ const read_check = createAsyncThunk("read_check", async (obj) => {
   //callback que realiza la petición
   try {
 
+
+
     let data = await axios(
-      apiUrl + "checks"
+      apiUrl + "checks/" + obj._id
     );
+
 
     return {
       check: data.data.response,
@@ -102,6 +105,8 @@ const destroy_check = createAsyncThunk(
   "destroy_check", //nombre de la accion
   async (obj) => {
     //callback que realiza la petición
+
+
     try {
       let data = await axios.delete(apiUrl + "checks/" + obj._id);
 
@@ -118,7 +123,7 @@ const destroy_check = createAsyncThunk(
   }
 );
 
-const reset_check_store = createAsyncThunk("reset_check_store");
+const reset_check_store = createAction("reset_check_store");
 
 
 
